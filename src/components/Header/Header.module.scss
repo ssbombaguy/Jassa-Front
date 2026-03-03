@@ -1,0 +1,304 @@
+@use '../../styles/variables' as *;
+
+// File: src/components/Header/Header.module.scss
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  height: $header-height;
+  background: $white;
+  border-bottom: 2px solid $background-light;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transition: box-shadow $transition-base;
+
+  &.scrolled {
+    box-shadow: $shadow-md;
+  }
+}
+
+.inner {
+  @include flex-between;
+  max-width: $container-max;
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 $spacing-xl;
+  gap: $spacing-lg;
+
+  @include respond-to(lg) {
+    padding: 0 $spacing-lg;
+  }
+
+  @include respond-to(md) {
+    padding: 0 $spacing-md;
+  }
+}
+
+// ─── Logo ─────────────────────────────────────────────────────────────────
+.logo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.logoIcon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, $primary-green, $accent-green);
+  border-radius: $border-radius-md;
+  @include flex-center;
+  font-size: 20px;
+  box-shadow: $shadow-sm;
+}
+
+.logoText {
+  font-family: $font-primary;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: $text-dark;
+  line-height: 1;
+
+  span {
+    color: $primary-green;
+  }
+
+  @include respond-to(sm) {
+    font-size: 1.2rem;
+  }
+}
+
+// ─── Navigation ───────────────────────────────────────────────────────────
+.nav {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  @include respond-to(lg) {
+    display: none;
+  }
+}
+
+.navLink {
+  font-family: $font-body;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: $gray-600;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $border-radius-sm;
+  transition: color $transition-fast, background $transition-fast;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+
+  &:hover {
+    color: $primary-green;
+    background: $background-light;
+  }
+
+  &.active {
+    color: $primary-green;
+    font-weight: 600;
+  }
+}
+
+// ─── Right Section ─────────────────────────────────────────────────────────
+.right {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.searchWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  @include respond-to(md) {
+    display: none;
+  }
+}
+
+.searchIcon {
+  position: absolute;
+  left: $spacing-md;
+  color: $gray-400;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+.searchInput {
+  font-family: $font-body;
+  font-size: 0.875rem;
+  background: $background-light;
+  border: 1.5px solid transparent;
+  border-radius: $border-radius-pill;
+  padding: $spacing-sm $spacing-md $spacing-sm ($spacing-xl + $spacing-sm);
+  width: 220px;
+  color: $text-dark;
+  transition: border-color $transition-base, width $transition-slow, box-shadow $transition-base;
+  outline: none;
+
+  &::placeholder {
+    color: $gray-400;
+  }
+
+  &:focus {
+    border-color: $accent-green;
+    background: $white;
+    width: 280px;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+  }
+}
+
+.cartButton {
+  @include button-reset;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  background: $primary-green;
+  color: $white;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $border-radius-pill;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: background $transition-fast, transform $transition-fast, box-shadow $transition-fast;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover {
+    background: $secondary-green;
+    transform: translateY(-1px);
+    box-shadow: $shadow-sm;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.cartCount {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: $accent-green;
+  color: $white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  @include flex-center;
+  line-height: 1;
+  border: 2px solid $white;
+  animation: popIn $transition-fast;
+
+  @keyframes popIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+}
+
+// ─── Mobile Menu Toggle ────────────────────────────────────────────────────
+.menuToggle {
+  @include button-reset;
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: $spacing-sm;
+  cursor: pointer;
+
+  @include respond-to(lg) {
+    display: flex;
+  }
+
+  span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: $text-dark;
+    border-radius: 2px;
+    transition: transform $transition-base, opacity $transition-base;
+  }
+
+  &.open {
+    span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    span:nth-child(2) { opacity: 0; }
+    span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  }
+}
+
+// ─── Mobile Nav ────────────────────────────────────────────────────────────
+.mobileNav {
+  position: fixed;
+  top: $header-height;
+  left: 0;
+  right: 0;
+  background: $white;
+  border-bottom: 2px solid $background-light;
+  padding: $spacing-md;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  z-index: 999;
+  transform: translateY(-20px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform $transition-base, opacity $transition-base;
+  box-shadow: $shadow-md;
+
+  &.open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+.mobileNavLink {
+  font-family: $font-body;
+  font-size: 1rem;
+  font-weight: 500;
+  color: $text-dark;
+  padding: $spacing-md;
+  border-radius: $border-radius-md;
+  transition: background $transition-fast, color $transition-fast;
+
+  &:hover {
+    background: $background-light;
+    color: $primary-green;
+  }
+}
+
+.mobileSearch {
+  position: relative;
+  margin-top: $spacing-sm;
+
+  input {
+    width: 100%;
+    font-family: $font-body;
+    font-size: 0.95rem;
+    background: $background-light;
+    border: 1.5px solid transparent;
+    border-radius: $border-radius-md;
+    padding: $spacing-sm $spacing-md $spacing-sm ($spacing-xl + $spacing-sm);
+    color: $text-dark;
+    outline: none;
+
+    &:focus {
+      border-color: $accent-green;
+      background: $white;
+    }
+
+    &::placeholder {
+      color: $gray-400;
+    }
+  }
+
+  .searchIcon {
+    left: $spacing-md;
+  }
+}

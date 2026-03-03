@@ -1,0 +1,344 @@
+@use '../../styles/variables' as *;
+
+// File: src/components/ProductCard/ProductCard.module.scss
+
+.card {
+  position: relative;
+  background: $white;
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  border: 1.5px solid $gray-200;
+  transition:
+    transform $transition-slow,
+    box-shadow $transition-slow,
+    border-color $transition-base;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: $shadow-lg;
+    border-color: rgba(46, 139, 87, 0.3);
+
+    .imageWrapper img {
+      transform: scale(1.06);
+    }
+
+    .quickActions {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .addToCartBtn {
+      background: $primary-green;
+    }
+  }
+}
+
+// ─── Badge ─────────────────────────────────────────────────────────────────
+.badge {
+  position: absolute;
+  top: $spacing-md;
+  left: $spacing-md;
+  z-index: 3;
+  font-family: $font-primary;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px $spacing-sm;
+  border-radius: $border-radius-sm;
+  line-height: 1.5;
+
+  &.new     { background: $accent-green;   color: $white; }
+  &.sale    { background: $danger;          color: $white; }
+  &.limited { background: $text-dark;       color: $white; }
+  &.retro   { background: $primary-green;   color: $white; }
+}
+
+// ─── Image Section ──────────────────────────────────────────────────────────
+.imageWrapper {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: $background-light;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform $transition-slow;
+  }
+}
+
+.wishlistBtn {
+  @include button-reset;
+  position: absolute;
+  top: $spacing-md;
+  right: $spacing-md;
+  z-index: 3;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(4px);
+  @include flex-center;
+  cursor: pointer;
+  transition: background $transition-fast, transform $transition-fast;
+  border: 1px solid $gray-200;
+
+  &:hover {
+    background: $white;
+    transform: scale(1.1);
+  }
+
+  svg {
+    color: $gray-400;
+    transition: color $transition-fast, fill $transition-fast;
+  }
+
+  &.wished svg {
+    color: $danger;
+    fill: $danger;
+  }
+}
+
+.quickActions {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacing-md;
+  background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity $transition-base, transform $transition-base;
+}
+
+.sizeRow {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+
+  span {
+    font-family: $font-body;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    backdrop-filter: blur(4px);
+    padding: 2px 6px;
+    border-radius: $border-radius-sm;
+  }
+}
+
+// ─── Card Body ──────────────────────────────────────────────────────────────
+.body {
+  padding: $spacing-md;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  flex: 1;
+}
+
+.brand {
+  font-family: $font-body;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $secondary-green;
+}
+
+.name {
+  font-family: $font-primary;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: $text-dark;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.ratingRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  margin-top: 2px;
+}
+
+.stars {
+  display: flex;
+  gap: 1px;
+}
+
+.star {
+  color: $accent-green;
+  font-size: 0.75rem;
+}
+
+.starEmpty {
+  color: $gray-200;
+}
+
+.reviewCount {
+  font-family: $font-body;
+  font-size: 0.72rem;
+  color: $gray-400;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-sm;
+  margin-top: auto;
+  padding-top: $spacing-sm;
+}
+
+.price {
+  font-family: $font-primary;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: $text-dark;
+  letter-spacing: -0.02em;
+}
+
+.originalPrice {
+  font-family: $font-body;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: $gray-400;
+  text-decoration: line-through;
+}
+
+.discount {
+  font-family: $font-body;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: $danger;
+  background: rgba(211, 47, 47, 0.08);
+  padding: 2px 6px;
+  border-radius: $border-radius-sm;
+}
+
+// ─── Footer / Actions ────────────────────────────────────────────────────────
+.cardFooter {
+  padding: $spacing-md;
+  padding-top: 0;
+}
+
+.sizeSelector {
+  margin-bottom: $spacing-sm;
+
+  .sizeSelectorLabel {
+    font-family: $font-body;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: $gray-600;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .sizeOptions {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+}
+
+.sizeBtn {
+  @include button-reset;
+  font-family: $font-body;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: $gray-600;
+  border: 1px solid $gray-200;
+  border-radius: $border-radius-sm;
+  padding: 3px 7px;
+  cursor: pointer;
+  transition: background $transition-fast, border-color $transition-fast, color $transition-fast;
+
+  &:hover {
+    border-color: $secondary-green;
+    color: $secondary-green;
+  }
+
+  &.selected {
+    background: $primary-green;
+    border-color: $primary-green;
+    color: $white;
+  }
+}
+
+.addToCartBtn {
+  @include button-reset;
+  width: 100%;
+  background: $text-dark;
+  color: $white;
+  font-family: $font-primary;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: $spacing-md;
+  border-radius: $border-radius-md;
+  cursor: pointer;
+  transition:
+    background $transition-base,
+    transform $transition-fast,
+    box-shadow $transition-fast;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+
+  &:hover {
+    background: $primary-green;
+    transform: translateY(-1px);
+    box-shadow: $shadow-sm;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &.added {
+    background: $accent-green;
+  }
+
+  &:disabled {
+    background: $gray-200;
+    color: $gray-400;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+.addedFeedback {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: $primary-green;
+  color: $white;
+  font-family: $font-primary;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: $spacing-sm $spacing-lg;
+  border-radius: $border-radius-pill;
+  pointer-events: none;
+  opacity: 0;
+  animation: addedPop 1.5s ease forwards;
+  z-index: 10;
+
+  @keyframes addedPop {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    20%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    70%  { opacity: 1; }
+    100% { opacity: 0; transform: translate(-50%, -60%); }
+  }
+}

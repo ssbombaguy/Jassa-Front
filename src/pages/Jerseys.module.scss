@@ -1,0 +1,56 @@
+@use '../styles/variables' as *;
+
+// File: src/pages/Jerseys.module.scss
+
+.pageHero {
+  background: linear-gradient(120deg, $text-dark 0%, $primary-green 100%);
+  padding: $spacing-2xl 0 $spacing-xl;
+}
+
+.pageHeroInner {
+  max-width: $container-max;
+  margin: 0 auto;
+  padding: 0 $spacing-xl;
+
+  @include respond-to(md) {
+    padding: 0 $spacing-md;
+  }
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+
+  a, span {
+    font-family: $font-body;
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.6);
+  }
+
+  a {
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $white;
+    }
+  }
+}
+
+.pageTitle {
+  font-family: $font-primary;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  color: $white;
+  letter-spacing: -0.03em;
+  margin-bottom: $spacing-sm;
+}
+
+.pageSubtitle {
+  font-family: $font-body;
+  font-size: 1rem;
+  color: rgba(255,255,255,0.7);
+  max-width: 480px;
+  line-height: 1.6;
+}

@@ -1,0 +1,207 @@
+@use '../../styles/variables' as *;
+
+// File: src/components/FilterBar/FilterBar.module.scss
+
+.wrapper {
+  background: $white;
+  border-bottom: 1.5px solid $gray-200;
+  position: sticky;
+  top: $header-height;
+  z-index: 900;
+}
+
+.filterBar {
+  max-width: $container-max;
+  margin: 0 auto;
+  padding: $spacing-md $spacing-xl;
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  flex-wrap: wrap;
+
+  @include respond-to(lg) {
+    padding: $spacing-md $spacing-lg;
+  }
+
+  @include respond-to(md) {
+    padding: $spacing-sm $spacing-md;
+    gap: $spacing-sm;
+  }
+}
+
+.label {
+  font-family: $font-primary;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $gray-400;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.filterGroups {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  flex-wrap: wrap;
+  flex: 1;
+
+  @include respond-to(sm) {
+    gap: $spacing-sm;
+    width: 100%;
+  }
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.groupLabel {
+  font-family: $font-body;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $gray-600;
+  white-space: nowrap;
+}
+
+// ─── Pill Filters ──────────────────────────────────────────────────────────
+.pillGroup {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.pill {
+  @include button-reset;
+  font-family: $font-body;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: $gray-600;
+  padding: 5px $spacing-md;
+  border: 1.5px solid $gray-200;
+  border-radius: $border-radius-pill;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background $transition-fast,
+    color $transition-fast,
+    border-color $transition-fast,
+    transform $transition-fast,
+    box-shadow $transition-fast;
+
+  &:hover {
+    border-color: $secondary-green;
+    color: $secondary-green;
+    background: rgba(46, 139, 87, 0.05);
+    transform: translateY(-1px);
+  }
+
+  &.active {
+    background: $primary-green;
+    border-color: $primary-green;
+    color: $white;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(31, 111, 80, 0.3);
+  }
+}
+
+// ─── Divider ───────────────────────────────────────────────────────────────
+.divider {
+  width: 1px;
+  height: 24px;
+  background: $gray-200;
+  flex-shrink: 0;
+
+  @include respond-to(sm) {
+    display: none;
+  }
+}
+
+// ─── Sort Dropdown ─────────────────────────────────────────────────────────
+.sortWrapper {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-left: auto;
+
+  @include respond-to(sm) {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+.sortSelect {
+  font-family: $font-body;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: $text-dark;
+  background: $background-light;
+  border: 1.5px solid transparent;
+  border-radius: $border-radius-md;
+  padding: $spacing-sm $spacing-lg $spacing-sm $spacing-md;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231F6F50' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right $spacing-sm center;
+  padding-right: 28px;
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+
+  &:focus {
+    border-color: $accent-green;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+  }
+
+  @include respond-to(sm) {
+    width: 100%;
+  }
+}
+
+// ─── Results Count ─────────────────────────────────────────────────────────
+.results {
+  font-family: $font-body;
+  font-size: 0.8rem;
+  color: $gray-400;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  strong {
+    color: $text-dark;
+    font-weight: 600;
+  }
+
+  @include respond-to(md) {
+    display: none;
+  }
+}
+
+.resetButton {
+  @include button-reset;
+  font-family: $font-body;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: $primary-green;
+  padding: 4px $spacing-sm;
+  border: 1px solid $accent-green;
+  border-radius: $border-radius-sm;
+  cursor: pointer;
+  transition: background $transition-fast, color $transition-fast;
+  white-space: nowrap;
+
+  &:hover {
+    background: $primary-green;
+    color: $white;
+  }
+}

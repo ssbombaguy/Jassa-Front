@@ -1,0 +1,146 @@
+@use '../../styles/variables' as *;
+
+// File: src/components/ProductGrid/ProductGrid.module.scss
+
+.section {
+  max-width: $container-max;
+  margin: 0 auto;
+  padding: $spacing-2xl $spacing-xl;
+
+  @include respond-to(lg) {
+    padding: $spacing-xl $spacing-lg;
+  }
+
+  @include respond-to(md) {
+    padding: $spacing-lg $spacing-md;
+  }
+}
+
+.sectionHeader {
+  @include flex-between;
+  margin-bottom: $spacing-xl;
+  gap: $spacing-md;
+
+  @include respond-to(sm) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.sectionTitle {
+  font-family: $font-primary;
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 900;
+  color: $text-dark;
+  letter-spacing: -0.03em;
+  line-height: 1;
+
+  span {
+    color: $primary-green;
+  }
+}
+
+.sectionSubtitle {
+  font-family: $font-body;
+  font-size: 0.9rem;
+  color: $gray-400;
+  font-weight: 400;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-lg;
+
+  @include respond-to(xl) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include respond-to(lg) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-md;
+  }
+
+  @include respond-to(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include respond-to(sm) {
+    grid-template-columns: repeat(1, 1fr);
+    gap: $spacing-md;
+  }
+}
+
+// ─── Empty State ───────────────────────────────────────────────────────────
+.emptyState {
+  grid-column: 1 / -1;
+  padding: $spacing-3xl $spacing-xl;
+  @include flex-center;
+  flex-direction: column;
+  gap: $spacing-md;
+  text-align: center;
+}
+
+.emptyIcon {
+  font-size: 3.5rem;
+  line-height: 1;
+  filter: grayscale(0.3);
+}
+
+.emptyTitle {
+  font-family: $font-primary;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: $text-dark;
+}
+
+.emptyText {
+  font-family: $font-body;
+  font-size: 0.95rem;
+  color: $gray-400;
+  max-width: 320px;
+  line-height: 1.6;
+}
+
+.emptyBtn {
+  @include button-reset;
+  margin-top: $spacing-sm;
+  background: $primary-green;
+  color: $white;
+  font-family: $font-primary;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: $spacing-md $spacing-xl;
+  border-radius: $border-radius-pill;
+  cursor: pointer;
+  transition: background $transition-fast, transform $transition-fast;
+
+  &:hover {
+    background: $secondary-green;
+    transform: translateY(-2px);
+  }
+}
+
+// ─── Card Enter Animation ──────────────────────────────────────────────────
+.cardWrapper {
+  animation: cardEntrance 0.4s ease both;
+
+  @for $i from 1 through 12 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{($i - 1) * 0.05}s;
+    }
+  }
+
+  @keyframes cardEntrance {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
