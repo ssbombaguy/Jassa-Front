@@ -1,0 +1,33 @@
+@use '../../styles/variables' as *;
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-lg;
+  
+  @include respond-to(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @include respond-to(sm) {
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
+  }
+}
+
+.error {
+  padding: $spacing-2xl;
+  text-align: center;
+  border: 1px solid #d32f2f;
+  border-radius: $border-radius;
+  color: #ff6b6b;
+  background: rgba(211, 47, 47, 0.1);
+}
+
+.empty {
+  padding: $spacing-2xl;
+  text-align: center;
+  color: $color-text-muted;
+  
+  h3 { color: $color-text; margin-bottom: $spacing-sm; }
+}

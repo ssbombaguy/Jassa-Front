@@ -1,300 +1,93 @@
 @use '../../styles/variables' as *;
 
-// File: src/components/Hero/Hero.module.scss
-
 .hero {
   position: relative;
-  width: 100%;
-  min-height: 540px;
-  background:
-    linear-gradient(135deg, $text-dark 0%, $primary-green 45%, $secondary-green 75%, $accent-green 100%);
-  overflow: hidden;
+  min-height: 480px;
   display: flex;
   align-items: center;
-
-  @include respond-to(md) {
-    min-height: 420px;
-  }
-
-  @include respond-to(sm) {
-    min-height: 360px;
-  }
-}
-
-// ─── Decorative Background Elements ─────────────────────────────────────────
-.bgDecor {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+  justify-content: center;
   overflow: hidden;
 }
 
-.bgCircle {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.04);
-
-  &:nth-child(1) {
-    width: 600px;
-    height: 600px;
-    top: -200px;
-    right: -100px;
-  }
-
-  &:nth-child(2) {
-    width: 300px;
-    height: 300px;
-    bottom: -80px;
-    left: 200px;
-    background: rgba(255,255,255,0.06);
-  }
-
-  &:nth-child(3) {
-    width: 150px;
-    height: 150px;
-    top: 40px;
-    left: 40%;
-    background: rgba(255,255,255,0.05);
-  }
-}
-
-.bgLines {
+.bgPattern {
   position: absolute;
   inset: 0;
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    width: 2px;
-    height: 100%;
-    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.08), transparent);
-  }
-
-  &::before {
-    left: 33%;
-    transform: rotate(15deg);
-    transform-origin: top center;
-  }
-
-  &::after {
-    left: 60%;
-    transform: rotate(-8deg);
-    transform-origin: bottom center;
-  }
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 20px,
+    rgba(82, 183, 136, 0.03) 20px,
+    rgba(82, 183, 136, 0.03) 40px
+  );
 }
 
-.hexPattern {
+.overlay {
   position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 45%;
-  opacity: 0.06;
-  background-image:
-    repeating-linear-gradient(
-      60deg,
-      $white 0,
-      $white 1px,
-      transparent 0,
-      transparent 50%
-    ),
-    repeating-linear-gradient(
-      120deg,
-      $white 0,
-      $white 1px,
-      transparent 0,
-      transparent 50%
-    );
-  background-size: 40px 70px;
-
-  @include respond-to(md) {
-    display: none;
-  }
+  inset: 0;
+  background: linear-gradient(135deg, rgba(26, 71, 42, 0.4) 0%, rgba(10, 10, 10, 0.9) 70%);
 }
 
-// ─── Content ───────────────────────────────────────────────────────────────
 .content {
   position: relative;
-  z-index: 2;
-  max-width: $container-max;
-  margin: 0 auto;
-  padding: $spacing-3xl $spacing-xl;
-  width: 100%;
-
-  @include respond-to(lg) {
-    padding: $spacing-2xl $spacing-lg;
-  }
-
-  @include respond-to(md) {
-    padding: $spacing-xl $spacing-md;
-  }
-}
-
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: $spacing-sm;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.2);
-  backdrop-filter: blur(8px);
-  color: rgba(255,255,255,0.9);
-  font-family: $font-body;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: $spacing-xs $spacing-md;
-  border-radius: $border-radius-pill;
-  margin-bottom: $spacing-lg;
-  animation: fadeSlideUp 0.6s ease both;
-
-  span {
-    width: 6px;
-    height: 6px;
-    background: $accent-green;
-    border-radius: 50%;
-    display: inline-block;
-  }
+  z-index: 1;
+  text-align: center;
+  padding: $spacing-xl;
 }
 
 .title {
-  font-family: $font-primary;
-  font-size: clamp(2.8rem, 6vw, 5rem);
-  font-weight: 900;
-  line-height: 0.95;
-  color: $white;
-  letter-spacing: -0.02em;
-  margin-bottom: $spacing-lg;
-  max-width: 700px;
-  animation: fadeSlideUp 0.6s 0.1s ease both;
-
-  em {
-    font-style: italic;
-    color: $accent-green;
-  }
-
-  @include respond-to(md) {
-    font-size: clamp(2rem, 8vw, 3.2rem);
-  }
+  font-family: $font-heading;
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  letter-spacing: 0.08em;
+  color: var(--color-text);
+  line-height: 1.1;
+  margin-bottom: $spacing-md;
 }
 
 .subtitle {
-  font-family: $font-body;
   font-size: 1.1rem;
-  font-weight: 400;
-  color: rgba(255,255,255,0.8);
-  max-width: 480px;
-  line-height: 1.7;
+  color: var(--color-text-muted);
   margin-bottom: $spacing-xl;
-  animation: fadeSlideUp 0.6s 0.2s ease both;
-
-  @include respond-to(md) {
-    font-size: 0.95rem;
-  }
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .actions {
   display: flex;
-  align-items: center;
   gap: $spacing-md;
-  animation: fadeSlideUp 0.6s 0.3s ease both;
-
-  @include respond-to(sm) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .ctaPrimary {
-  @include button-reset;
-  background: $white;
-  color: $primary-green;
-  font-family: $font-primary;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  display: inline-block;
   padding: $spacing-md $spacing-xl;
-  border-radius: $border-radius-pill;
-  cursor: pointer;
-  transition: transform $transition-base, box-shadow $transition-base, background $transition-base;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: $border-radius;
+  transition: $transition;
 
   &:hover {
+    opacity: 0.9;
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
-    background: $background-light;
-  }
-
-  &:active {
-    transform: translateY(0);
+    box-shadow: 0 4px 16px rgba(45, 106, 79, 0.3);
   }
 }
 
-.ctaSecondary {
-  @include button-reset;
-  display: flex;
-  align-items: center;
-  gap: $spacing-sm;
-  color: rgba(255,255,255,0.9);
-  font-family: $font-body;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: color $transition-fast, gap $transition-fast;
-  border-bottom: 1px solid rgba(255,255,255,0.3);
-  padding-bottom: 2px;
-
+.ctaOutline {
+  display: inline-block;
+  padding: $spacing-md $spacing-xl;
+  border: 2px solid var(--color-accent);
+  color: var(--color-accent);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: $border-radius;
+  transition: $transition;
+  
   &:hover {
-    color: $white;
-    gap: $spacing-md;
-  }
-}
-
-// ─── Stats Bar ──────────────────────────────────────────────────────────────
-.statsBar {
-  display: flex;
-  gap: $spacing-xl;
-  margin-top: $spacing-2xl;
-  padding-top: $spacing-xl;
-  border-top: 1px solid rgba(255,255,255,0.12);
-  animation: fadeSlideUp 0.6s 0.4s ease both;
-
-  @include respond-to(sm) {
-    gap: $spacing-lg;
-    margin-top: $spacing-xl;
-  }
-}
-
-.stat {
-  .statValue {
-    font-family: $font-primary;
-    font-size: 2rem;
-    font-weight: 800;
-    color: $white;
-    line-height: 1;
-  }
-
-  .statLabel {
-    font-family: $font-body;
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: rgba(255,255,255,0.6);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
-}
-
-// ─── Animations ────────────────────────────────────────────────────────────
-@keyframes fadeSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+    background: rgba(45, 106, 79, 0.15);
+    transform: translateY(-2px);
   }
 }

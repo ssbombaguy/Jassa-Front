@@ -1,0 +1,38 @@
+@use '../../styles/variables' as *;
+
+.wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  
+  &::-webkit-scrollbar { display: none; }
+}
+
+.scroll {
+  display: flex;
+  gap: $spacing-sm;
+  padding: $spacing-md 0;
+}
+
+.pill {
+  @include button-reset;
+  padding: $spacing-sm $spacing-lg;
+  border: 1.5px solid $color-border;
+  border-radius: 50px;
+  color: $color-text-muted;
+  font-size: 0.9rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: $transition;
+  
+  &:hover {
+    border-color: $color-accent;
+    color: $color-accent;
+  }
+  
+  &.active {
+    background: $color-accent;
+    border-color: $color-accent;
+    color: $color-bg;
+  }
+}

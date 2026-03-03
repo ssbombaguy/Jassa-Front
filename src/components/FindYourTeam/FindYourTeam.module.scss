@@ -1,0 +1,94 @@
+@use '../../styles/variables' as *;
+
+.section {
+  padding: $spacing-2xl $spacing-lg;
+  max-width: $container-max;
+  margin: 0 auto;
+}
+
+.title {
+  font-family: $font-heading;
+  font-size: 2rem;
+  letter-spacing: 0.05em;
+  color: var(--color-text);
+  margin-bottom: $spacing-xl;
+}
+
+.tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: $spacing-xl;
+}
+
+.tab {
+  padding: $spacing-md $spacing-xl;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:first-child {
+    border-radius: $border-radius 0 0 $border-radius;
+  }
+  &:last-child {
+    border-radius: 0 $border-radius $border-radius 0;
+  }
+
+  &.active {
+    background: var(--color-text);
+    color: var(--color-surface);
+    border-color: var(--color-text);
+  }
+
+  &:hover:not(.active) {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: $spacing-lg;
+
+  @include respond-to(md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include respond-to(sm) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-md;
+  }
+}
+
+.card {
+  aspect-ratio: 1;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: $border-radius;
+  @include flex-center;
+  flex-direction: column;
+  gap: $spacing-md;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.logo {
+  width: 64px;
+  height: 64px;
+  background: var(--color-border);
+  border-radius: 50%;
+}
+
+.name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text);
+}

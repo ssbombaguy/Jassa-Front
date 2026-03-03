@@ -1,89 +1,48 @@
-// File: src/components/Footer/Footer.jsx
+import { Link } from 'react-router-dom';
+import classes from './Footer.module.scss';
 
-import { useState } from "react";
-import classes from "./Footer.module.scss";
-
-const footerLinks = {
-  Shop: ["Jerseys", "Boots", "Accessories", "Goalkeeper Kits", "Training Wear", "Sale"],
-  Help: ["Size Guide", "Shipping Info", "Returns & Exchanges", "Order Tracking", "FAQ", "Contact Us"],
-  Company: ["About Us", "Careers", "Press", "Sustainability", "Affiliate Programme"],
-};
-
-const Footer = () => {
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    if (email.trim()) {
-      setSubscribed(true);
-      setEmail("");
-    }
-  };
-
-  return (
-    <footer className={classes["footer"]}>
-      <div className={classes["upper"]}>
-        {/* Brand Column */}
-        <div className={classes["brandCol"]}>
-          <div className={classes["logo"]}>
-            <div className={classes["logoIcon"]}>⚽</div>
-            <div className={classes["logoText"]}>
-              Strike<span>Green</span>
-            </div>
-          </div>
-          <p className={classes["tagline"]}>
-            Your go-to destination for professional football jerseys. Club colours, national pride — all in one pitch-perfect store.
-          </p>
-          <div className={classes["socials"]}>
-            <button className={classes["socialBtn"]} aria-label="Instagram">𝕀</button>
-            <button className={classes["socialBtn"]} aria-label="Twitter/X">𝕏</button>
-            <button className={classes["socialBtn"]} aria-label="Facebook">𝔽</button>
-            <button className={classes["socialBtn"]} aria-label="YouTube">▶</button>
-          </div>
-        </div>
-
-        {/* Navigation Columns */}
-        {Object.entries(footerLinks).map(([heading, links]) => (
-          <div key={heading} className={classes["col"]}>
-            <h4>{heading}</h4>
-            <ul>
-              {links.map((link) => (
-                <li key={link}>
-                  <a href="#">{link}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-
-        {/* Newsletter — only show on lg+ via grid flow */}
+const Footer = () => (
+  <footer className={classes.footer}>
+    <div className={classes.grid}>
+      <div className={classes.col}>
+        <h4>About</h4>
+        <p>Jassa Store — Official club jerseys for every league and season. Authentic, premium quality.</p>
       </div>
-
-      {/* Newsletter Strip */}
-      <div className={classes["lower"]} style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
-        <div className={classes["lowerInner"]}>
-          <p className={classes["copyright"]}>
-            © {new Date().getFullYear()} StrikeGreen Sports Ltd. All rights reserved.
-          </p>
-
-          <div className={classes["paymentIcons"]}>
-            <span>VISA</span>
-            <span>MC</span>
-            <span>AMEX</span>
-            <span>PAYPAL</span>
-            <span>KLARNA</span>
-          </div>
-
-          <div className={classes["legalLinks"]}>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Cookie Policy</a>
-            <a href="#">Terms of Use</a>
-          </div>
-        </div>
+      <div className={classes.col}>
+        <h4>Leagues</h4>
+        <ul>
+          <li><Link to="/leagues">All Leagues</Link></li>
+          <li><Link to="/jerseys?league=premier">Premier League</Link></li>
+          <li><Link to="/jerseys?league=ucl">UEFA Champions League</Link></li>
+          <li><Link to="/jerseys?league=mls">MLS</Link></li>
+        </ul>
       </div>
-    </footer>
-  );
-};
+      <div className={classes.col}>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><Link to="/jerseys">Jerseys</Link></li>
+          <li><a href="#">Size Guide</a></li>
+          <li><a href="#">Shipping & Returns</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div className={classes.col}>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:hello@jassastore.com">hello@jassastore.com</a></li>
+          <li><a href="tel:+1234567890">+1 234 567 890</a></li>
+        </ul>
+      </div>
+    </div>
+    <div className={classes.socialRow}>
+      <a href="#" aria-label="Instagram">𝕀</a>
+      <a href="#" aria-label="Twitter">𝕏</a>
+      <a href="#" aria-label="Facebook">𝔽</a>
+    </div>
+    <div className={classes.bar}>
+      © 2025 Jassa Store. All rights reserved.
+    </div>
+  </footer>
+);
 
 export default Footer;

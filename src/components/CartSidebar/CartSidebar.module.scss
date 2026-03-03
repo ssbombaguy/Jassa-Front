@@ -1,0 +1,175 @@
+@use '../../styles/variables' as *;
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(400px, 95vw);
+  background: $color-surface;
+  border-left: 1px solid $color-border;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.header {
+  @include flex-between;
+  padding: $spacing-lg;
+  border-bottom: 1px solid $color-border;
+  
+  h3 {
+    font-family: $font-heading;
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+  }
+}
+
+.closeBtn {
+  @include button-reset;
+  font-size: 1.5rem;
+  color: $color-text-muted;
+  
+  &:hover { color: $color-text; }
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: $spacing-lg;
+}
+
+.empty {
+  @include flex-center;
+  flex-direction: column;
+  gap: $spacing-lg;
+  padding: $spacing-2xl;
+  text-align: center;
+  color: $color-text-muted;
+}
+
+.startBtn {
+  padding: $spacing-md $spacing-xl;
+  background: $color-accent;
+  color: $color-bg;
+  font-weight: 600;
+  border-radius: $border-radius;
+  
+  &:hover { background: lighten($color-accent, 8%); }
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.item {
+  padding: $spacing-md 0;
+  border-bottom: 1px solid $color-border;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.itemInfo {
+  .itemName { font-weight: 600; display: block; }
+  .itemMeta { font-size: 0.85rem; color: $color-text-muted; }
+}
+
+.itemActions {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+.qty {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  
+  button {
+    @include button-reset;
+    width: 28px;
+    height: 28px;
+    border: 1px solid $color-border;
+    color: $color-text;
+    border-radius: $border-radius;
+    
+    &:hover { border-color: $color-accent; color: $color-accent; }
+  }
+  
+  span { min-width: 24px; text-align: center; }
+}
+
+.itemPrice {
+  font-weight: 600;
+  color: $color-accent;
+}
+
+.removeBtn {
+  @include button-reset;
+  color: $color-text-muted;
+  margin-left: auto;
+  
+  &:hover { color: #e74c3c; }
+}
+
+.footer {
+  margin-top: auto;
+  padding-top: $spacing-lg;
+  border-top: 1px solid $color-border;
+}
+
+.subtotal {
+  @include flex-between;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: $spacing-md;
+}
+
+.checkoutBtn {
+  @include button-reset;
+  width: 100%;
+  padding: $spacing-md;
+  background: $color-accent;
+  color: $color-bg;
+  font-weight: 600;
+  border-radius: $border-radius;
+  transition: $transition;
+  
+  &:hover {
+    background: lighten($color-accent, 8%);
+    box-shadow: $glow;
+  }
+}
+
+.clearBtn {
+  @include button-reset;
+  width: 100%;
+  padding: $spacing-sm;
+  margin-top: $spacing-sm;
+  color: $color-text-muted;
+  font-size: 0.9rem;
+  
+  &:hover { color: #e74c3c; }
+}

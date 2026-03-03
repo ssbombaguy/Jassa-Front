@@ -1,0 +1,111 @@
+@use '../../styles/variables' as *;
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(320px, 85vw);
+  background: $color-surface;
+  border-right: 1px solid $color-border;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.header {
+  @include flex-between;
+  padding: $spacing-lg;
+  border-bottom: 1px solid $color-border;
+  
+  h3 {
+    font-family: $font-heading;
+    font-size: 1.2rem;
+    letter-spacing: 0.05em;
+  }
+}
+
+.closeBtn {
+  @include button-reset;
+  font-size: 1.5rem;
+  color: $color-text-muted;
+  
+  &:hover { color: $color-text; }
+}
+
+.content {
+  padding: $spacing-lg;
+  overflow-y: auto;
+}
+
+.group {
+  margin-bottom: $spacing-xl;
+  
+  h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: $color-text-muted;
+    margin-bottom: $spacing-md;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  cursor: pointer;
+  margin-bottom: $spacing-sm;
+  color: $color-text;
+  
+  input { accent-color: $color-accent; }
+}
+
+.range {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  color: $color-text-muted;
+  font-size: 0.9rem;
+  
+  input[type="range"] {
+    flex: 1;
+    accent-color: $color-accent;
+  }
+}
+
+.clearBtn {
+  @include button-reset;
+  width: 100%;
+  padding: $spacing-md;
+  border: 1px solid $color-border;
+  color: $color-text-muted;
+  font-size: 0.9rem;
+  border-radius: $border-radius;
+  margin-top: $spacing-lg;
+  
+  &:hover {
+    border-color: $color-accent;
+    color: $color-accent;
+  }
+}

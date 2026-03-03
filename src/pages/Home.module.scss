@@ -1,0 +1,10 @@
+@use '../styles/variables' as *;
+
+.section {
+  padding: $spacing-xl $spacing-lg;
+}
+
+.container {
+  max-width: $container-max;
+  margin: 0 auto;
+}

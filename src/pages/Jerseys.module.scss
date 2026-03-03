@@ -1,56 +1,48 @@
 @use '../styles/variables' as *;
 
-// File: src/pages/Jerseys.module.scss
-
-.pageHero {
-  background: linear-gradient(120deg, $text-dark 0%, $primary-green 100%);
-  padding: $spacing-2xl 0 $spacing-xl;
+.page {
+  padding: $spacing-xl $spacing-lg;
+  min-height: 60vh;
 }
 
-.pageHeroInner {
+.header {
+  max-width: $container-max;
+  margin: 0 auto $spacing-lg;
+  @include flex-between;
+  
+  h1 {
+    font-family: $font-heading;
+    font-size: 2rem;
+    letter-spacing: 0.05em;
+  }
+}
+
+.filterToggle {
+  padding: $spacing-sm $spacing-md;
+  border: 1px solid $color-border;
+  color: $color-text;
+  background: $color-surface;
+  border-radius: $border-radius;
+  font-size: 0.9rem;
+  
+  @media (min-width: $breakpoint-desktop) {
+    display: none;
+  }
+  
+  &:hover {
+    border-color: $color-accent;
+    color: $color-accent;
+  }
+}
+
+.layout {
   max-width: $container-max;
   margin: 0 auto;
-  padding: 0 $spacing-xl;
-
-  @include respond-to(md) {
-    padding: 0 $spacing-md;
-  }
-}
-
-.breadcrumb {
   display: flex;
-  align-items: center;
-  gap: $spacing-sm;
-  margin-bottom: $spacing-md;
-
-  a, span {
-    font-family: $font-body;
-    font-size: 0.8rem;
-    color: rgba(255,255,255,0.6);
-  }
-
-  a {
-    transition: color $transition-fast;
-
-    &:hover {
-      color: $white;
-    }
-  }
+  gap: $spacing-xl;
 }
 
-.pageTitle {
-  font-family: $font-primary;
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 900;
-  color: $white;
-  letter-spacing: -0.03em;
-  margin-bottom: $spacing-sm;
-}
-
-.pageSubtitle {
-  font-family: $font-body;
-  font-size: 1rem;
-  color: rgba(255,255,255,0.7);
-  max-width: 480px;
-  line-height: 1.6;
+.content {
+  flex: 1;
+  min-width: 0;
 }

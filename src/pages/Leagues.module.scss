@@ -1,0 +1,58 @@
+@use '../styles/variables' as *;
+
+.page {
+  padding: $spacing-xl $spacing-lg;
+  max-width: $container-max;
+  margin: 0 auto;
+  
+  h1 {
+    font-family: $font-heading;
+    font-size: 2rem;
+    letter-spacing: 0.05em;
+    margin-bottom: $spacing-xl;
+  }
+}
+
+.loading {
+  text-align: center;
+  padding: $spacing-2xl;
+  color: $color-text-muted;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: $spacing-lg;
+}
+
+.card {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: $border-radius;
+  padding: $spacing-xl;
+  transition: $transition;
+  
+  &:hover {
+    border-color: $color-accent;
+    box-shadow: $glow;
+    transform: translateY(-4px);
+  }
+  
+  h3 {
+    font-family: $font-heading;
+    font-size: 1.3rem;
+    letter-spacing: 0.05em;
+    margin-bottom: $spacing-sm;
+  }
+  
+  p {
+    font-size: 0.9rem;
+    color: $color-text-muted;
+    margin-bottom: $spacing-sm;
+  }
+}
+
+.clubs {
+  font-size: 0.85rem;
+  color: $color-accent;
+}

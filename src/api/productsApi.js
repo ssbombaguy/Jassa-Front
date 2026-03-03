@@ -1,4 +1,5 @@
 import apiClient from "./client";
+import { mockProducts } from "../data/mockProducts";
 
 const pickData = (payload) => {
   if (Array.isArray(payload)) return payload;
@@ -41,15 +42,62 @@ const normalizeProduct = (product) => {
   };
 };
 
-export const getProducts = async (params) => {
-  const payload = await apiClient.get("/products", { params });
-  const products = pickData(payload).map(normalizeProduct);
-  const pagination = pickPagination(payload, params?.limit ?? 20);
-
+const filterAndSortMock = (params = {}) => {
+  let list = [...mockProducts];
+  if (params?.brand && params.brand !== "All") {
+    list = list.filter((p) => p.brand === params.brand);
+  }
+  if (params?.size && params.size !== "All") {
+    list = list.filter((p) => (p.sizes || []).includes(params.size));
+  }
+  if (params?.search && params.search.trim()) {
+    const q = params.search.trim().toLowerCase();
+    list = list.filter(
+      (p) =>
+        (p.name || "").toLowerCase().includes(q) ||
+        (p.brand || "").toLowerCase().includes(q)
+    );
+  }
+  const sort = params?.sort || "";
+  const order = params?.order || "asc";
+  if (sort === "price") {
+    list.sort((a, b) => (order === "desc" ? b.price - a.price : a.price - b.price));
+  } else if (sort === "rating") {
+    list.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+  } else if (sort === "name") {
+    list.sort((a, b) =>
+      order === "desc"
+        ? (b.name || "").localeCompare(a.name || "")
+        : (a.name || "").localeCompare(b.name || "")
+    );
+  }
+  const page = params?.page ?? 1;
+  const limit = params?.limit ?? 20;
+  const total = list.length;
+  const start = (page - 1) * limit;
+  const products = list.slice(start, start + limit);
   return {
-    products,
-    pagination,
+    products: products.map(normalizeProduct),
+    pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
   };
+};
+
+export const getProducts = async (params) => {
+  try {
+    const payload = await apiClient.get("/products", { params });
+    const products = pickData(payload).map(normalizeProduct);
+    const pagination = pickPagination(payload, params?.limit ?? 20);
+
+    return {
+      products,
+      pagination,
+    };
+  } catch (err) {
+    if (err?.code === "ERR_NETWORK" || err?.message?.includes("Network Error")) {
+      return filterAndSortMock(params);
+    }
+    throw err;
+  }
 };
 
 export const getProductById = async (id) => {

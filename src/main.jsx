@@ -1,16 +1,19 @@
-// File: src/main.jsx
-
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
-import store from "./store/store";
+import { CartProvider } from "./context/CartContext";
+import { ThemeProvider } from "./context/ThemeContext";
+import { LanguageProvider } from "./context/LanguageContext";
 import App from "./App";
 import "./styles/global.scss";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <CartProvider>
+          <App />
+        </CartProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   </StrictMode>
 );

@@ -1,0 +1,9 @@
+@use '../../styles/variables' as *;
+
+.banner {
+  background: #d32f2f;
+  color: white;
+  text-align: center;
+  padding: $spacing-sm;
+  font-size: 0.9rem;
+}

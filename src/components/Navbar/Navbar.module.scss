@@ -1,0 +1,223 @@
+@use '../../styles/variables' as *;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: transparent;
+  transition: background $transition;
+  
+  &.scrolled {
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 1px 0 var(--color-border);
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+
+  @include respond-to(md) {
+    display: none;
+  }
+}
+
+.langSwitcher {
+  display: flex;
+  gap: 2px;
+
+  button {
+    @include button-reset;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    padding: $spacing-xs $spacing-sm;
+
+    &:hover { color: var(--color-text); }
+    &.langActive { color: var(--color-accent); font-weight: 600; }
+  }
+}
+
+.themeBtn {
+  @include button-reset;
+  font-size: 1.1rem;
+  color: var(--color-text);
+  padding: $spacing-xs;
+}
+
+.inner {
+  max-width: $container-max;
+  margin: 0 auto;
+  padding: $spacing-md $spacing-lg;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xl;
+}
+
+.logo {
+  font-family: $font-heading;
+  font-size: 1.75rem;
+  letter-spacing: 0.15em;
+  color: var(--color-text);
+  flex-shrink: 0;
+
+  &:hover { color: var(--color-accent); }
+}
+
+.searchForm {
+  flex: 1;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: $border-radius;
+  padding: 0 $spacing-md;
+  
+  @include respond-to(md) {
+    display: none;
+  }
+}
+
+.searchIcon {
+  color: var(--color-text-muted);
+  margin-right: $spacing-sm;
+}
+
+.searchInput {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--color-text);
+  padding: $spacing-sm 0;
+  font-family: $font-body;
+  font-size: 0.9rem;
+
+  &::placeholder {
+    color: var(--color-text-muted);
+  }
+  
+  &:focus {
+    outline: none;
+  }
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+  
+  @include respond-to(md) {
+    display: none;
+  }
+}
+
+.navLink {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  transition: color $transition;
+
+  &:hover, &.active { color: var(--color-accent); }
+}
+
+.cartBtn {
+  @include button-reset;
+  position: relative;
+  color: var(--color-text);
+  padding: $spacing-sm;
+
+  &:hover { color: var(--color-accent); }
+}
+
+.cartBadge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-size: 0.65rem;
+  font-weight: 700;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  @include flex-center;
+}
+
+.menuToggle {
+  @include button-reset;
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  color: var(--color-text);
+  
+  span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: currentColor;
+    transition: $transition;
+  }
+  
+  &.open span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  &.open span:nth-child(2) { opacity: 0; }
+  &.open span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+  
+  @include respond-to(md) {
+    display: flex;
+  }
+}
+
+.mobileNav {
+  position: fixed;
+  top: $header-height;
+  left: 0;
+  right: 0;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  z-index: 999;
+  transform: translateY(-100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: $transition;
+  
+  &.open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  @media (min-width: $breakpoint-tablet) {
+    display: none;
+  }
+}
+
+.mobileLink {
+  font-size: 1rem;
+  color: var(--color-text);
+
+  &:hover { color: var(--color-accent); }
+}
+
+.mobileSearch {
+  margin-top: $spacing-sm;
+
+  input {
+    width: 100%;
+    padding: $spacing-sm $spacing-md;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: $border-radius;
+    color: var(--color-text);
+    font-family: $font-body;
+  }
+}
