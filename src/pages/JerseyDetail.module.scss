@@ -1,99 +1,175 @@
+@use 'sass:color';
 @use '../styles/variables' as *;
 
 .page {
   padding: $spacing-xl $spacing-lg;
   max-width: $container-max;
   margin: 0 auto;
+  min-height: 80vh;
 }
 
 .back {
-  display: inline-block;
-  color: $color-text-muted;
-  margin-bottom: $spacing-lg;
-  
-  &:hover { color: $color-accent; }
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  margin-bottom: $spacing-2xl;
+  transition: color 0.2s ease;
+
+  &::before {
+    content: '←';
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    color: var(--color-accent);
+    &::before { transform: translateX(-4px); }
+  }
 }
 
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: $spacing-2xl;
-  
+  gap: $spacing-2xl * 1.5;
+  align-items: start;
+
   @include respond-to(md) {
     grid-template-columns: 1fr;
+    gap: $spacing-xl;
   }
 }
 
+// ── IMAGE BLOCK ──────────────────────────────────────────
 .imageBlock {
-  aspect-ratio: 4 / 5;
-  border-radius: $border-radius;
+  position: sticky;
+  top: 100px;
+  border-radius: $border-radius * 2;
   overflow: hidden;
-  
+  aspect-ratio: 4 / 5;
+
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
+  }
+
+  @include respond-to(md) {
+    position: static;
+    aspect-ratio: 1 / 1;
   }
 }
 
-.loading, .error {
-  text-align: center;
-  padding: $spacing-2xl;
-  color: $color-text-muted;
-}
-
-.error { color: #e74c3c; }
-
+// ── INFO PANEL ───────────────────────────────────────────
 .info {
-  .club {
-    font-family: $font-heading;
-    font-size: 1.5rem;
-    letter-spacing: 0.05em;
-    margin-bottom: $spacing-xs;
-  }
-  
-  .league {
-    font-size: 0.95rem;
-    color: $color-text-muted;
-    margin-bottom: $spacing-md;
-  }
+  padding-top: $spacing-md;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 }
 
-.badges {
+.clubRow {
   display: flex;
-  flex-wrap: wrap;
-  gap: $spacing-sm;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.club {
+  font-family: $font-heading;
+  font-size: 2.6rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--color-text);
+  text-transform: uppercase;
+}
+
+.league {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
   margin-bottom: $spacing-lg;
 }
 
+// ── BADGES ───────────────────────────────────────────────
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-xl;
+}
+
 .typeBadge {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 5px 12px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+.season {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
   padding: 4px 10px;
+  border: 1px solid var(--color-border);
   border-radius: 2px;
 }
 
-.season, .tech {
-  font-size: 0.85rem;
-  color: $color-text-muted;
+.tech {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  letter-spacing: 0.05em;
+}
+
+// ── PRICE ────────────────────────────────────────────────
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-md;
+  margin-bottom: $spacing-2xl;
+  padding-bottom: $spacing-xl;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .price {
   font-family: $font-heading;
-  font-size: 2rem;
-  color: $color-accent;
-  margin-bottom: $spacing-xl;
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--color-accent);
+  letter-spacing: -0.02em;
+  line-height: 1;
 }
 
-.sizeGroup, .qtyGroup {
-  margin-bottom: $spacing-lg;
-  
+.priceOld {
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+}
+
+// ── SIZE SELECTOR ────────────────────────────────────────
+.sizeGroup {
+  margin-bottom: $spacing-xl;
+
   label {
     display: block;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: $spacing-sm;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: $spacing-md;
   }
 }
 
@@ -104,83 +180,211 @@
 }
 
 .sizeBtn {
-  width: 44px;
-  height: 44px;
-  border: 1px solid $color-border;
-  background: $color-surface;
-  color: $color-text;
-  font-weight: 600;
-  border-radius: $border-radius;
-  
-  &:hover, &.active {
-    border-color: $color-accent;
-    color: $color-accent;
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border: 1.5px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: rgba(82, 183, 136, 0.06);
   }
-  
-  &.active { background: rgba(82, 183, 136, 0.15); }
+
+  &.active {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    color: #000;
+    font-weight: 800;
+  }
+
+  &.outOfStock {
+    opacity: 0.3;
+    cursor: not-allowed;
+    text-decoration: line-through;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 4px;
+      right: 4px;
+      height: 1px;
+      background: currentColor;
+      transform: rotate(-20deg);
+    }
+  }
+}
+
+// ── QUANTITY ─────────────────────────────────────────────
+.qtyGroup {
+  margin-bottom: $spacing-xl;
+
+  label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: $spacing-md;
+  }
 }
 
 .qtyBtns {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: $spacing-md;
-  
+  border: 1.5px solid var(--color-border);
+  border-radius: 4px;
+  overflow: hidden;
+
   button {
-    width: 36px;
-    height: 36px;
-    border: 1px solid $color-border;
-    background: $color-surface;
-    color: $color-text;
-    font-size: 1.2rem;
-    border-radius: $border-radius;
-    
-    &:hover { border-color: $color-accent; }
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    color: var(--color-text);
+    font-size: 1.3rem;
+    font-weight: 300;
+    cursor: pointer;
+    transition: background 0.15s ease;
+
+    &:hover { background: var(--color-border); }
   }
-  
-  span { min-width: 32px; text-align: center; }
+
+  span {
+    min-width: 48px;
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-left: 1.5px solid var(--color-border);
+    border-right: 1.5px solid var(--color-border);
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
+// ── BUTTONS ──────────────────────────────────────────────
 .addBtn {
   width: 100%;
-  padding: $spacing-md;
-  background: $color-accent;
-  color: $color-bg;
-  font-weight: 600;
+  padding: 16px;
+  background: var(--color-accent);
+  color: #000;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   border: none;
-  border-radius: $border-radius;
-  margin-bottom: $spacing-md;
-  
-  &:hover {
-    background: lighten($color-accent, 8%);
-    box-shadow: $glow;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: $spacing-sm;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    transition: background 0.2s ease;
+  }
+
+  &:hover::after {
+    background: rgba(0, 0, 0, 0.08);
+  }
+
+  &:active {
+    transform: scale(0.99);
   }
 }
 
 .wishlistBtn {
   width: 100%;
-  padding: $spacing-md;
-  border: 2px solid $color-border;
-  color: $color-text;
-  background: none;
-  border-radius: $border-radius;
-  margin-bottom: $spacing-xl;
-  
-  &:hover { border-color: $color-accent; color: $color-accent; }
+  padding: 16px;
+  background: transparent;
+  color: var(--color-text);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1.5px solid var(--color-border);
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: $spacing-2xl;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
 }
 
+// ── ACCORDION ────────────────────────────────────────────
 .accordion {
-  border-bottom: 1px solid $color-border;
-  margin-bottom: $spacing-md;
-  
+  border-top: 1px solid var(--color-border);
+
+  &:last-child {
+    border-bottom: 1px solid var(--color-border);
+  }
+
   summary {
-    padding: $spacing-md 0;
+    padding: $spacing-lg 0;
     cursor: pointer;
-    font-weight: 600;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+
+    &::after {
+      content: '+';
+      font-size: 1.2rem;
+      font-weight: 300;
+      transition: transform 0.2s ease;
+    }
   }
-  
+
+  &[open] summary::after {
+    transform: rotate(45deg);
+  }
+
   p {
-    padding-bottom: $spacing-md;
-    color: $color-text-muted;
-    font-size: 0.95rem;
+    padding-bottom: $spacing-lg;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    line-height: 1.7;
   }
+}
+
+// ── STATES ───────────────────────────────────────────────
+.loading {
+  text-align: center;
+  padding: $spacing-2xl;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.error {
+  text-align: center;
+  padding: $spacing-2xl;
+  color: #e74c3c;
+  font-size: 0.9rem;
 }

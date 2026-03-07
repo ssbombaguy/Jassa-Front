@@ -7,8 +7,9 @@ import Home from './pages/Home';
 import Jerseys from './pages/Jerseys';
 import JerseyDetail from './pages/JerseyDetail';
 import Leagues from './pages/Leagues';
-import NotFound from './pages/NotFound';
 import { useState } from 'react';
+// import Products from './pages/Products'; // need to create this
+// import Search from './pages/Search';  
 
 const App = () => {
   const [cartOpen, setCartOpen] = useState(false);
@@ -20,11 +21,11 @@ const App = () => {
         <Navbar onCartOpen={() => setCartOpen(true)} />
         <main className="appMain">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/jerseys" element={<Jerseys />} />
-            <Route path="/jerseys/:id" element={<JerseyDetail />} />
-            <Route path="/leagues" element={<Leagues />} />
-            <Route path="*" element={<NotFound />} />
+            <Route path="/boots" element={<Products category="boots" />} />
+            <Route path="/equipment" element={<Products category="equipment" />} />
+            <Route path="/sale" element={<Jerseys defaultFilter={{ is_discounted: true }} />} />
+            <Route path="/new-arrivals" element={<Jerseys defaultFilter={{ is_new_arrival: true }} />} />
+            <Route path="/search" element={<Search />} />
           </Routes>
         </main>
         <Footer />

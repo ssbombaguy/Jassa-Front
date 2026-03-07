@@ -26,8 +26,19 @@ apiClient.interceptors.response.use(
     return response.data; // Return only the data object
   },
   (error) => {
-    console.error('[API Error]', error.response?.data || error.message);
-    return Promise.reject(error.response?.data || error);
+    if (!error.response) {
+      const networkError = {
+        success: false,
+        code: error.code || 'ERR_NETWORK',
+        error: `Cannot connect to backend API at ${API_BASE_URL}. Make sure backend server is running and CORS allows this origin.`,
+        details: error.message,
+      };
+      console.error('[API Error]', networkError);
+      return Promise.reject(networkError);
+    }
+
+    console.error('[API Error]', error.response.data || error.message);
+    return Promise.reject(error.response.data || { success: false, error: error.message });
   }
 );
 

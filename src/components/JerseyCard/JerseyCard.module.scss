@@ -1,11 +1,16 @@
+@use 'sass:color';
 @use '../../styles/variables' as *;
 
 .card {
+  position: relative;
   background: $color-surface;
   border-radius: $border-radius;
   overflow: hidden;
   transition: $transition;
   animation: fadeIn 0.5s ease both;
+  max-width: 280px;
+  width: 100%;
+  justify-self: center;
   
   &:hover {
     transform: translateY(-6px);
@@ -33,6 +38,17 @@
     object-fit: cover;
   }
 }
+.discountBadge {
+  position: absolute;
+  top: $spacing-md;
+  left: $spacing-md;
+  background: #e63946;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
 
 .wishlist {
   @include button-reset;
@@ -45,18 +61,20 @@
   &:hover, &.active { color: #e74c3c; }
 }
 
-.card {
-  position: relative;
-}
 
 .content {
-  padding: $spacing-md;
+  padding: $spacing-sm;
 }
 
 .club {
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   color: $color-text;
+  margin-bottom: $spacing-xs;
+}
+.jerseyName {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
   margin-bottom: $spacing-xs;
 }
 
@@ -82,32 +100,32 @@
 }
 
 .season {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: $color-text-muted;
   margin-bottom: $spacing-sm;
 }
 
 .price {
   font-family: $font-heading;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   letter-spacing: 0.02em;
   color: $color-accent;
-  margin-bottom: $spacing-md;
+  margin-bottom: $spacing-sm;
 }
 
 .addBtn {
   @include button-reset;
   width: 100%;
-  padding: $spacing-sm $spacing-md;
+  padding: $spacing-xs $spacing-sm;
   background: $color-accent;
   color: $color-bg;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   border-radius: $border-radius;
   transition: $transition;
   
   &:hover {
-    background: lighten($color-accent, 8%);
+    background: color.adjust($color-accent, $lightness: 8%);
     box-shadow: 0 0 12px rgba(82, 183, 136, 0.4);
   }
 }

@@ -1,9 +1,8 @@
 import axios from 'axios';
 
-// Backend API – mock data used only when network fails (connection refused, etc.)
 const BASE_URL = import.meta.env.VITE_API_URL
   ? `${import.meta.env.VITE_API_URL}/api`
-  : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api');
+  : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api');
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -26,3 +25,4 @@ export const getLeagues = (params = {}) => api.get('/leagues', { params });
 export const getLeague = (id) => api.get(`/leagues/${id}`);
 export const getClubs = (params = {}) => api.get('/clubs', { params });
 export const getClubJerseys = (clubId, params = {}) => api.get(`/clubs/${clubId}/jerseys`, { params });
+export const getNavBar = (params = {}) => api.get('/nav/header', { params });

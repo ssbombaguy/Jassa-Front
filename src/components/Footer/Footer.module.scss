@@ -1,10 +1,20 @@
 @use '../../styles/variables' as *;
 
 .footer {
-  background: $color-surface;
-  border-top: 1px solid $color-border;
+  background: var(--color-surface);
+  opacity: 0.85;
+  border-top: 1px solid var(--color-border);
   padding: $spacing-2xl $spacing-lg $spacing-lg;
   margin-top: auto;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(var(--color-bg-rgb, 10, 20, 15), 0.6) 30%,
+    rgba(var(--color-bg-rgb, 10, 20, 15), 0.85) 100%
+  );
 }
 
 .grid {
@@ -13,11 +23,11 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: $spacing-xl;
-  
+
   @include respond-to(md) {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   @include respond-to(sm) {
     grid-template-columns: 1fr;
     gap: $spacing-lg;
@@ -27,34 +37,42 @@
 .col {
   h4 {
     font-family: $font-heading;
-    font-size: 1rem;
-    letter-spacing: 0.1em;
-    color: $color-text;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-text);
     margin-bottom: $spacing-md;
+    opacity: 0.7;
   }
-  
+
   p {
-    font-size: 0.9rem;
-    color: $color-text-muted;
-    line-height: 1.6;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    opacity: 0.8;
   }
-  
+
   ul {
     list-style: none;
     padding: 0;
     margin: 0;
   }
-  
+
   li {
     margin-bottom: $spacing-sm;
   }
-  
+
   a {
-    font-size: 0.9rem;
-    color: $color-text-muted;
-    transition: color $transition;
-    
-    &:hover { color: $color-accent; }
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      opacity: 1;
+      color: var(--color-accent);
+    }
   }
 }
 
@@ -63,19 +81,28 @@
   margin: $spacing-xl auto $spacing-lg;
   display: flex;
   gap: $spacing-lg;
-  
+
   a {
-    color: $color-text-muted;
-    font-size: 1.2rem;
-    
-    &:hover { color: $color-accent; }
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+    opacity: 0.6;
+    transition: opacity 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      opacity: 1;
+      color: var(--color-accent);
+    }
   }
 }
 
 .bar {
+  max-width: $container-max;
+  margin: 0 auto;
   text-align: center;
-  font-size: 0.85rem;
-  color: $color-text-muted;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  opacity: 0.5;
   padding-top: $spacing-lg;
-  border-top: 1px solid $color-border;
+  border-top: 1px solid var(--color-border);
+  letter-spacing: 0.05em;
 }

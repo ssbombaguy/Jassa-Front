@@ -1,48 +1,79 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getFooterNav } from '../../api/navApi';
 import classes from './Footer.module.scss';
 
-const Footer = () => (
-  <footer className={classes.footer}>
-    <div className={classes.grid}>
-      <div className={classes.col}>
-        <h4>About</h4>
-        <p>Jassa Store — Official club jerseys for every league and season. Authentic, premium quality.</p>
+const fallbackGroups = [
+  {
+    id: 'shop',
+    label: 'Shop',
+    links: [
+      { id: 'shop-jerseys', label: 'Jerseys', path: '/jerseys', external: false },
+      { id: 'shop-leagues', label: 'Leagues', path: '/leagues', external: false },
+    ],
+  },
+  {
+    id: 'support',
+    label: 'Support',
+    links: [
+      { id: 'support-contact', label: 'Contact', path: '#', external: false },
+      { id: 'support-shipping', label: 'Shipping', path: '#', external: false },
+    ],
+  },
+];
+
+const Footer = () => {
+  const [groups, setGroups] = useState([]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    getFooterNav()
+      .then((items) => {
+        if (!mounted) return;
+        setGroups(items);
+      })
+      .catch(() => {
+        if (!mounted) return;
+        setGroups([]);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const navGroups = groups.length ? groups : fallbackGroups;
+
+  return (
+    <footer className={classes.footer}>
+      <div className={classes.grid}>
+        <div className={classes.col}>
+          <h4>About</h4>
+          <p>JassSport official football store. Authentic kits, training wear, and fan favorites from top clubs and nations.</p>
+        </div>
+        {navGroups.map((group) => (
+          <div className={classes.col} key={group.id}>
+            <h4>{group.label}</h4>
+            <ul>
+              {group.links.map((link) => (
+                <li key={link.id}>
+                  {link.external ? (
+                    <a href={link.path || '#'} target="_blank" rel="noreferrer">{link.label}</a>
+                  ) : (
+                    <Link to={link.path || '/'}>{link.label}</Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
-      <div className={classes.col}>
-        <h4>Leagues</h4>
-        <ul>
-          <li><Link to="/leagues">All Leagues</Link></li>
-          <li><Link to="/jerseys?league=premier">Premier League</Link></li>
-          <li><Link to="/jerseys?league=ucl">UEFA Champions League</Link></li>
-          <li><Link to="/jerseys?league=mls">MLS</Link></li>
-        </ul>
+      <div className={classes.bar}>
+        &copy; 2026 JassSport. All rights reserved.
       </div>
-      <div className={classes.col}>
-        <h4>Quick Links</h4>
-        <ul>
-          <li><Link to="/jerseys">Jerseys</Link></li>
-          <li><a href="#">Size Guide</a></li>
-          <li><a href="#">Shipping & Returns</a></li>
-          <li><a href="#">Contact</a></li>
-        </ul>
-      </div>
-      <div className={classes.col}>
-        <h4>Contact</h4>
-        <ul>
-          <li><a href="mailto:hello@jassastore.com">hello@jassastore.com</a></li>
-          <li><a href="tel:+1234567890">+1 234 567 890</a></li>
-        </ul>
-      </div>
-    </div>
-    <div className={classes.socialRow}>
-      <a href="#" aria-label="Instagram">𝕀</a>
-      <a href="#" aria-label="Twitter">𝕏</a>
-      <a href="#" aria-label="Facebook">𝔽</a>
-    </div>
-    <div className={classes.bar}>
-      © 2025 Jassa Store. All rights reserved.
-    </div>
-  </footer>
-);
+    </footer>
+  );
+};
 
 export default Footer;

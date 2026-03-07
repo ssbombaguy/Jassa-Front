@@ -8,3 +8,114 @@
   max-width: $container-max;
   margin: 0 auto;
 }
+
+.sectionTitle {
+  font-family: $font-heading;
+  font-size: 2rem;
+  letter-spacing: 0.08em;
+  margin-bottom: $spacing-lg;
+}
+
+.status {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+.statusError {
+  color: #cc4b4b;
+  font-size: 0.95rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: $spacing-lg;
+
+  @include respond-to(lg) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @include respond-to(md) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @include respond-to(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: $border-radius;
+  overflow: hidden;
+}
+
+.imageWrap {
+  display: block;
+  aspect-ratio: 4 / 5;
+  background: #f2f2f2;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.cardBody {
+  padding: $spacing-md;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  h3 {
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  button {
+    margin-top: $spacing-sm;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-text);
+    border-radius: $border-radius;
+    padding: 8px 10px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+  }
+}
+
+.type {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+
+.subtitle {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+}
+
+.priceRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.price {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.originalPrice {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+}

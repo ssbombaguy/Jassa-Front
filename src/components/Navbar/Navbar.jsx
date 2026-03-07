@@ -3,29 +3,19 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { getHeaderNav } from '../../api/navApi';
+import {Search, ShoppingCart,Sun,Moon } from 'lucide-react';
 import classes from './Navbar.module.scss';
 
-const navLinks = [
-  { labelKey: 'nav.home', path: '/' },
-  { labelKey: 'nav.leagues', path: '/leagues' },
-  { labelKey: 'nav.clubs', path: '/jerseys' },
-  { labelKey: 'nav.jerseys', path: '/jerseys' },
-];
 
-const CartIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="9" cy="21" r="1" />
-    <circle cx="20" cy="21" r="1" />
-    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-  </svg>
-);
 
-const SearchIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="11" cy="11" r="8" />
-    <line x1="21" y1="21" x2="16.65" y2="16.65" />
-  </svg>
-);
+const fallbackLinks = [
+  { id: 'jerseys',     label: 'Jerseys',       path: '/jerseys',  children: [] },
+  { id: 'leagues',     label: 'Leagues',       path: '/leagues',  children: [] },
+  { id: 'equipment',   label: 'Equipment',     path: '/equipment',children: [] },
+  { id: 'sale',        label: 'Sale',          path: '/sale',     children: [] },
+  { id: 'new-arrivals',label: 'New Arrivals',  path: '/new-arrivals', children: [] },
+]
 
 const Navbar = ({ onCartOpen }) => {
   const { cartCount } = useCart();
@@ -35,6 +25,10 @@ const Navbar = ({ onCartOpen }) => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
+  const [headerLinks, setHeaderLinks] = useState([]);
+
+
+  const navLinks = headerLinks.length ? headerLinks : fallbackLinks;
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -42,9 +36,76 @@ const Navbar = ({ onCartOpen }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    let mounted = true;
+    getHeaderNav().then((items) => {
+        if (!mounted) return;
+        console.log(items);
+        setHeaderLinks(items);
+      })
+      .catch(() => {
+        if (!mounted) return;
+        setHeaderLinks([]);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   const handleSearch = (e) => {
     e?.preventDefault?.();
     if (searchValue.trim()) navigate(`/jerseys?search=${encodeURIComponent(searchValue.trim())}`);
+  };
+
+  const renderNavItem = (item, mobile = false) => {
+    const key = `${mobile ? 'mobile' : 'desktop'}-${item.id}`;
+
+    if (item.children?.length) {
+      return (
+        <div key={key} className={mobile ? classes.mobileGroup : classes.dropdown}>
+          <span className={mobile ? classes.mobileGroupTitle : classes.dropdownTitle}>{item.label}</span>
+          <div className={mobile ? classes.mobileGroupLinks : classes.dropdownMenu}>
+            {item.children.map((child) =>
+              child.external ? (
+                <a
+                  key={`${key}-${child.id}`}
+                  href={child.path || '#'}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={mobile ? classes.mobileLink : classes.dropdownLink}
+                >
+                  {child.label}
+                </a>
+              ) : (
+                <Link
+                  key={`${key}-${child.id}`}
+                  to={child.path || '/'}
+                  className={mobile ? classes.mobileLink : classes.dropdownLink}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {child.label}
+                </Link>
+              )
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    if (item.external) {
+      return (
+        <a key={key} href={item.path || '#'} target="_blank" rel="noreferrer" className={mobile ? classes.mobileLink : classes.navLink}>
+          {item.label}
+        </a>
+      );
+    }
+
+    return (
+      <Link key={key} to={item.path || '/'} className={mobile ? classes.mobileLink : classes.navLink} onClick={() => setMenuOpen(false)}>
+        {item.label}
+      </Link>
+    );
   };
 
   return (
@@ -52,11 +113,11 @@ const Navbar = ({ onCartOpen }) => {
       <header className={`${classes.header} ${scrolled ? classes.scrolled : ''}`}>
         <div className={classes.inner}>
           <Link to="/" className={classes.logo}>
-            JASSA
+            JASSSPORT
           </Link>
 
           <form className={classes.searchForm} onSubmit={handleSearch}>
-            <span className={classes.searchIcon}><SearchIcon /></span>
+            <span className={classes.searchIcon}><Search /></span>
             <input
               type="search"
               className={classes.searchInput}
@@ -68,25 +129,15 @@ const Navbar = ({ onCartOpen }) => {
           </form>
 
           <nav className={classes.nav}>
-            {navLinks.map((link) => (
-              <Link key={link.labelKey} to={link.path} className={classes.navLink}>
-                {t(link.labelKey)}
-              </Link>
-            ))}
+            {navLinks.map((item) => renderNavItem(item))}
           </nav>
 
           <div className={classes.actions}>
             <div className={classes.langSwitcher}>
-              <button
-                className={lang === 'en' ? classes.langActive : ''}
-                onClick={() => setLang('en')}
-              >
+              <button className={lang === 'en' ? classes.langActive : ''} onClick={() => setLang('en')}>
                 EN
               </button>
-              <button
-                className={lang === 'ka' ? classes.langActive : ''}
-                onClick={() => setLang('ka')}
-              >
+              <button className={lang === 'ka' ? classes.langActive : ''} onClick={() => setLang('ka')}>
                 KA
               </button>
             </div>
@@ -95,36 +146,22 @@ const Navbar = ({ onCartOpen }) => {
               onClick={toggleTheme}
               aria-label={theme === 'dark' ? 'Switch to light' : 'Switch to dark'}
             >
-              {theme === 'dark' ? '☀' : '☽'}
+              {theme === 'dark' ? <Sun size={20}/> :<Moon size={20}/>}
             </button>
-            <button
-              className={classes.cartBtn}
-              onClick={onCartOpen}
-              aria-label={`${t('nav.cart')}: ${cartCount} items`}
-            >
-              <CartIcon />
-              {cartCount > 0 && (
-                <span className={classes.cartBadge}>{cartCount > 99 ? '99+' : cartCount}</span>
-              )}
+            <button className={classes.cartBtn} onClick={onCartOpen} aria-label={`${t('nav.cart')}: ${cartCount} items`}>
+              <ShoppingCart />
+              {cartCount > 0 ? <span className={classes.cartBadge}>{cartCount > 99 ? '99+' : cartCount}</span> : null}
             </button>
           </div>
 
-          <button
-            className={`${classes.menuToggle} ${menuOpen ? classes.open : ''}`}
-            onClick={() => setMenuOpen((p) => !p)}
-            aria-label="Menu"
-          >
+          <button className={`${classes.menuToggle} ${menuOpen ? classes.open : ''}`} onClick={() => setMenuOpen((p) => !p)} aria-label="Menu">
             <span /><span /><span />
           </button>
         </div>
       </header>
 
       <nav className={`${classes.mobileNav} ${menuOpen ? classes.open : ''}`}>
-        {navLinks.map((link) => (
-          <Link key={link.labelKey} to={link.path} className={classes.mobileLink} onClick={() => setMenuOpen(false)}>
-            {t(link.labelKey)}
-          </Link>
-        ))}
+        {navLinks.map((item) => renderNavItem(item, true))}
         <form className={classes.mobileSearch} onSubmit={handleSearch}>
           <input
             type="search"

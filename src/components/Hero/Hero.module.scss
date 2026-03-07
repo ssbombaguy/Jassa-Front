@@ -2,92 +2,181 @@
 
 .hero {
   position: relative;
-  min-height: 480px;
+  width: 100%;
+  max-width: $container-max;
+  margin: 0 auto;
+}
+
+.embla {
+  overflow: hidden;
+  width: 100%;
+  border-radius: $border-radius;
+}
+
+.emblaContainer {
+  display: flex;
+}
+
+.emblaSlide {
+  flex: 0 0 100%;
+  min-width: 0;
+  position: relative;
+  height: 580px;
   display: flex;
   align-items: center;
-  justify-content: center;
   overflow: hidden;
+
+  @include respond-to(md) {
+    height: 400px;
+  }
+
+  @include respond-to(sm) {
+    height: 300px;
+  }
 }
 
-.bgPattern {
+.imagePlaceholder {
   position: absolute;
   inset: 0;
-  background: repeating-linear-gradient(
-    -45deg,
-    transparent,
-    transparent 20px,
-    rgba(82, 183, 136, 0.03) 20px,
-    rgba(82, 183, 136, 0.03) 40px
-  );
-}
+  background-size: cover;
+  background-position: center 85%;
 
-.overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(26, 71, 42, 0.4) 0%, rgba(10, 10, 10, 0.9) 70%);
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.75) 0%,
+      rgba(0, 0, 0, 0.35) 50%,
+      rgba(0, 0, 0, 0.05) 100%
+    );
+  }
 }
 
 .content {
   position: relative;
   z-index: 1;
-  text-align: center;
-  padding: $spacing-xl;
+  padding: 0 $spacing-2xl;
+  max-width: 560px;
+
+  &.left { margin-left: 0; }
+  &.right { margin-left: auto; }
+  &.center {
+    margin: 0 auto;
+    text-align: center;
+    .actions { justify-content: center; }
+  }
+
+  @include respond-to(sm) {
+    padding: 0 $spacing-lg;
+  }
+}
+
+.label {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: $spacing-sm;
 }
 
 .title {
   font-family: $font-heading;
-  font-size: clamp(2.5rem, 8vw, 4.5rem);
-  letter-spacing: 0.08em;
-  color: var(--color-text);
+  font-size: 3rem;
+  font-weight: 800;
+  color: #ffffff;
   line-height: 1.1;
   margin-bottom: $spacing-md;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+
+  @include respond-to(md) { font-size: 2.2rem; }
+  @include respond-to(sm) { font-size: 1.6rem; }
 }
 
 .subtitle {
-  font-size: 1.1rem;
-  color: var(--color-text-muted);
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.85);
   margin-bottom: $spacing-xl;
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
+  line-height: 1.6;
+  max-width: 420px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+
+  @include respond-to(sm) {
+    font-size: 0.875rem;
+    margin-bottom: $spacing-lg;
+  }
 }
 
 .actions {
   display: flex;
   gap: $spacing-md;
-  justify-content: center;
   flex-wrap: wrap;
 }
 
 .ctaPrimary {
-  display: inline-block;
-  padding: $spacing-md $spacing-xl;
-  background: var(--color-accent);
-  color: var(--color-on-accent);
-  font-weight: 600;
-  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 14px 32px;
   border-radius: $border-radius;
-  transition: $transition;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #ffffff;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  letter-spacing: 0.03em;
 
   &:hover {
     opacity: 0.9;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(45, 106, 79, 0.3);
+    transform: translateY(-1px);
   }
 }
 
 .ctaOutline {
-  display: inline-block;
-  padding: $spacing-md $spacing-xl;
-  border: 2px solid var(--color-accent);
-  color: var(--color-accent);
-  font-weight: 600;
-  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 14px 32px;
   border-radius: $border-radius;
-  transition: $transition;
-  
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #ffffff;
+  text-decoration: none;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  backdrop-filter: blur(4px);
+
   &:hover {
-    background: rgba(45, 106, 79, 0.15);
-    transform: translateY(-2px);
+    border-color: #ffffff;
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+  }
+}
+
+.dots {
+  position: absolute;
+  bottom: $spacing-lg;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.dot {
+  width: 28px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.4);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease, width 0.2s ease;
+  padding: 0;
+
+  &.dotActive {
+    background: #ffffff;
+    width: 40px;
   }
 }

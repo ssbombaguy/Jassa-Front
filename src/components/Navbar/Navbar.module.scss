@@ -114,12 +114,64 @@
 }
 
 .navLink {
+  display: inline-flex;
+  align-items: center;
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--color-text-muted);
   transition: color $transition;
 
   &:hover, &.active { color: var(--color-accent); }
+}
+
+.dropdown {
+  position: relative;
+
+  &:hover .dropdownMenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+.dropdownTitle {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  cursor: default;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: $spacing-sm;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: $border-radius;
+  box-shadow: $card-shadow;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: $transition;
+}
+
+.dropdownLink {
+  padding: 7px 10px;
+  border-radius: $border-radius;
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+
+  &:hover {
+    color: var(--color-accent);
+    background: var(--color-bg);
+  }
 }
 
 .cartBtn {
@@ -220,4 +272,24 @@
     color: var(--color-text);
     font-family: $font-body;
   }
+}
+
+.mobileGroup {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.mobileGroupTitle {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+}
+
+.mobileGroupLinks {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  padding-left: $spacing-sm;
 }

@@ -17,7 +17,7 @@ export const translations = {
     },
     findTeam: {
       title: 'FIND YOUR TEAM',
-      nationalTeams: 'National Teams',
+      leagueTeams: 'Leagues',
       clubs: 'Clubs',
     },
     leagues: {
@@ -84,7 +84,7 @@ export const translations = {
     },
     findTeam: {
       title: 'იპოვეთ თქვენი გუნდი',
-      nationalTeams: 'ეროვნული ნაკრები',
+      leagueTeams: 'ლიგები',
       clubs: 'კლუბები',
     },
     leagues: {

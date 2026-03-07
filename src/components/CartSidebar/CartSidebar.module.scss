@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '../../styles/variables' as *;
 
 .backdrop {
@@ -74,7 +75,7 @@
   font-weight: 600;
   border-radius: $border-radius;
   
-  &:hover { background: lighten($color-accent, 8%); }
+  &:hover { background: color.adjust($color-accent, $lightness: 8%); }
 }
 
 .list {
@@ -158,7 +159,7 @@
   transition: $transition;
   
   &:hover {
-    background: lighten($color-accent, 8%);
+    background: color.adjust($color-accent, $lightness: 8%);
     box-shadow: $glow;
   }
 }

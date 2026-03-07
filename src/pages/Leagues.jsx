@@ -1,31 +1,25 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getLeagues } from '../services/api';
+import { getLeagues } from '../api/leaguesApi';
 import classes from './Leagues.module.scss';
-
-const mockLeagues = [
-  { id: 1, name: 'Premier League', slug: 'premier', country: 'England', clubs_count: 20 },
-  { id: 2, name: 'Bundesliga', slug: 'bundesliga', country: 'Germany', clubs_count: 18 },
-  { id: 3, name: 'Serie A', slug: 'serie-a', country: 'Italy', clubs_count: 20 },
-  { id: 4, name: 'UEFA Champions League', slug: 'ucl', country: 'Europe', clubs_count: 32 },
-  { id: 5, name: 'MLS', slug: 'mls', country: 'USA', clubs_count: 29 },
-];
 
 const Leagues = () => {
   const [leagues, setLeagues] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     getLeagues()
       .then((res) => {
         const arr = res?.data ?? res;
-        setLeagues(Array.isArray(arr) && arr.length ? arr : mockLeagues);
+        setLeagues(Array.isArray(arr) ? arr : []);
       })
-      .catch(() => setLeagues(mockLeagues))
+      .catch((err) => setError(err?.error || err?.message || 'Failed to load leagues'))
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className={classes.loading}>Loading leagues…</div>;
+  if (loading) return <div className={classes.loading}>Loading leagues...</div>;
+  if (error) return <div className={classes.loading}>{error}</div>;
 
   return (
     <main className={classes.page}>
@@ -33,11 +27,11 @@ const Leagues = () => {
       <div className={classes.grid}>
         {leagues.map((league) => (
           <Link
-            key={league.id}
-            to={`/jerseys?league=${league.slug || league.id}`}
+            key={league.league_id ?? league.id}
+            to={`/jerseys?league=${league.league_id ?? league.id}`}
             className={classes.card}
           >
-            <h3>{league.name}</h3>
+            <h3>{league.league_name ?? league.name}</h3>
             <p>{league.country}</p>
             <span className={classes.clubs}>
               {league.clubs_count ?? league.club_count ?? 0} clubs

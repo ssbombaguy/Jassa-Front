@@ -46,3 +46,56 @@
   flex: 1;
   min-width: 0;
 }
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.leftControls {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+
+  label {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+
+  select {
+    border: 1px solid var(--color-border);
+    border-radius: $border-radius;
+    background: var(--color-surface);
+    color: var(--color-text);
+    padding: 6px 10px;
+  }
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  button {
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    border-radius: $border-radius;
+    padding: 6px 10px;
+    min-width: 36px;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.activePage {
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
+}

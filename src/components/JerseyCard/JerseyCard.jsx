@@ -14,11 +14,12 @@ const JerseyCard = ({ jersey, index = 0 }) => {
   const { addToCart } = useCart();
   const [wishlisted, setWishlisted] = useState(false);
   const id = jersey.id ?? jersey.jersey_id;
-  const type = (jersey.type || 'home').toLowerCase();
+  const type = (jersey.jersey_type || 'home').toLowerCase();
   const typeStyle = typeStyles[type] || typeStyles.home;
-  const price = jersey.price ?? jersey.price_usd ?? 0;
+  const normalizedPrice = Number(jersey.price ?? jersey.price_usd ?? 0);
+  const price = Number.isFinite(normalizedPrice) ? normalizedPrice : 0;
   const primaryColor = jersey.primary_color || '#1a472a';
-  const image = jersey.image || `https://placehold.co/400x480/${primaryColor.replace('#', '')}/FFFFFF?text=${encodeURIComponent((jersey.club_name || jersey.name || 'Jersey').slice(0, 6))}`;
+  const image = jersey.image_url || `https://placehold.co/400x480/${primaryColor.replace('#', '')}/FFFFFF?text=${encodeURIComponent((jersey.club_name || jersey.name || 'Jersey').slice(0, 6))}`;
 
   return (
     <article
@@ -33,6 +34,11 @@ const JerseyCard = ({ jersey, index = 0 }) => {
           <img src={image} alt={jersey.name || jersey.club_name} />
         </div>
       </Link>
+      {jersey.is_discounted && (
+        <span className={classes.discountBadge}>
+          -{jersey.discount_pct}%
+        </span>
+        )}
       <button
         className={`${classes.wishlist} ${wishlisted ? classes.active : ''}`}
         onClick={() => setWishlisted(!wishlisted)}
@@ -41,13 +47,14 @@ const JerseyCard = ({ jersey, index = 0 }) => {
         <HeartIcon />
       </button>
       <div className={classes.content}>
-        <p className={classes.club}>{jersey.club_name || jersey.name}</p>
+        <p className={classes.club}>{jersey.club_name}</p>
+        <p className={classes.jerseyName}>{jersey.name}</p>
         <div className={classes.badges}>
           <span
             className={classes.typeBadge}
             style={{ background: typeStyle.bg, color: typeStyle.color }}
           >
-            {(jersey.type || 'HOME').toUpperCase()}
+            {(jersey.jersey_type || 'HOME').toUpperCase()}
           </span>
           {jersey.technology && (
             <span className={classes.techBadge}>{jersey.technology}</span>

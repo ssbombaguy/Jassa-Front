@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { getJersey } from '../services/api';
-import { mockJerseys } from '../data/mockJerseys';
+import { getJerseyById } from '../api/jerseysApi';
 import classes from './JerseyDetail.module.scss';
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
@@ -21,25 +20,26 @@ const JerseyDetail = () => {
   const [error, setError] = useState(null);
   const [size, setSize] = useState('M');
   const [qty, setQty] = useState(1);
+ 
 
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
     setError(null);
-    getJersey(id)
+    getJerseyById(id)
       .then((res) => {
         if (cancelled) return;
         const j = res?.data ?? res?.jersey ?? res;
-        setJersey(j);
+        setJersey({
+          ...j,
+          id: j?.id ?? j?.jersey_id ?? id,
+          type: (j?.jersey_type || j?.type || 'home').toLowerCase(),
+          price: Number(j?.price ?? j?.price_usd ?? 0),
+        });
       })
       .catch((err) => {
         if (cancelled) return;
-        if (err?.code === 'ERR_NETWORK' || err?.message?.includes('Network')) {
-          const mock = mockJerseys.find((j) => String(j.id) === String(id) || String(j.jersey_id) === String(id));
-          setJersey(mock || mockJerseys[0]);
-        } else {
-          setError(err?.message || 'Failed to load jersey');
-        }
+        setError(err?.error || err?.message || 'Failed to load jersey');
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -50,12 +50,17 @@ const JerseyDetail = () => {
   if (loading) return <div className={classes.loading}>Loading…</div>;
   if (error) return <div className={classes.error}>{error}</div>;
   if (!jersey) return <div className={classes.error}>Jersey not found</div>;
+  const sizes = jersey.sizes?.length ? jersey.sizes :
+  ['XS','S','M','L','XL','XXL'].map(s => ({ size: s, in_stock: true }));
 
-  const type = (jersey.type || 'home').toLowerCase();
+  const type = (jersey.jersey_type || 'home').toLowerCase();
   const typeStyle = typeStyles[type] || typeStyles.home;
-  const price = jersey.price ?? jersey.price_usd ?? 0;
+  const price = Number(jersey.price ?? jersey.price_usd ?? 0);
+  const discountedPrice = jersey.is_discounted && jersey.discount_pct
+  ? +(price * (1 - jersey.discount_pct / 100)).toFixed(2)
+  : null;
   const primaryColor = jersey.primary_color || '#1a472a';
-  const image = jersey.image || `https://placehold.co/600x720/${primaryColor.replace('#', '')}/FFFFFF?text=Jersey`;
+  const image = jersey.image_url || `https://placehold.co/600x720/${primaryColor.replace('#', '')}/FFFFFF?text=Jersey`;
 
   return (
     <main className={classes.page}>
@@ -72,23 +77,33 @@ const JerseyDetail = () => {
           <p className={classes.league}>{jersey.league_name}</p>
           <div className={classes.badges}>
             <span className={classes.typeBadge} style={{ background: typeStyle.bg, color: typeStyle.color }}>
-              {(jersey.type || 'HOME').toUpperCase()}
+              {(jersey.jersey_type || 'HOME').toUpperCase()}
             </span>
             {jersey.season && <span className={classes.season}>{jersey.season}</span>}
             {jersey.technology && <span className={classes.tech}>{jersey.technology}</span>}
           </div>
-          <p className={classes.price}>${price.toFixed(2)}</p>
+          <div className={classes.priceRow}>
+            {discountedPrice ? (
+              <>
+                <p className={classes.priceOld}>${price.toFixed(2)}</p>
+                <p className={classes.price}>${discountedPrice.toFixed(2)}</p>
+              </>
+              ) : (
+                <p className={classes.price}>${price.toFixed(2)}</p>
+              )}
+          </div>
           <div className={classes.sizeGroup}>
             <label>Size</label>
             <div className={classes.sizeBtns}>
-              {SIZES.map((s) => (
-                <button
+              {sizes.map(({ size: s, in_stock }) => (
+              <button
                   key={s}
-                  className={`${classes.sizeBtn} ${size === s ? classes.active : ''}`}
-                  onClick={() => setSize(s)}
-                >
-                  {s}
-                </button>
+                  className={`${classes.sizeBtn} ${size === s ? classes.active : ''} ${!in_stock ? classes.outOfStock : ''}`}
+                  onClick={() => in_stock && setSize(s)}
+                  disabled={!in_stock}
+                      >
+                        {s}
+              </button>
               ))}
             </div>
           </div>

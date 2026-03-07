@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '../styles/variables' as *;
 
 .page {
@@ -23,5 +24,5 @@
   font-weight: 600;
   border-radius: $border-radius;
   
-  &:hover { background: lighten($color-accent, 8%); }
+  &:hover { background: color.adjust($color-accent, $lightness: 8%); }
 }
