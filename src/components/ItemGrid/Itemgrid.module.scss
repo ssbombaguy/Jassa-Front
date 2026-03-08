@@ -1,0 +1,56 @@
+@use '../../styles/variables' as *;
+
+.grid {
+  display: grid;
+  gap: $spacing-md;
+  align-items: start;
+
+  // 3 columns (default)
+  &[data-cols="3"] {
+    grid-template-columns: repeat(3, 1fr);
+
+    @include respond-to(md) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include respond-to(sm) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: $spacing-sm;
+    }
+  }
+
+  // 6 columns (compact)
+  &[data-cols="6"] {
+    grid-template-columns: repeat(6, 1fr);
+
+    @include respond-to(md) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @include respond-to(sm) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: $spacing-sm;
+    }
+  }
+}
+
+.error {
+  padding: $spacing-2xl;
+  text-align: center;
+  border: 1px solid #d32f2f;
+  border-radius: $border-radius;
+  color: #ff6b6b;
+  background: rgba(211, 47, 47, 0.1);
+}
+
+.empty {
+  padding: $spacing-2xl;
+  text-align: center;
+  color: $color-text-muted;
+
+  h3 {
+    color: $color-text;
+    margin-bottom: $spacing-sm;
+    font-family: $font-heading;
+  }
+}

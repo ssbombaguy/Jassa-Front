@@ -73,7 +73,7 @@
 .emblaSlide {
   flex: 0 0 180px;
   min-width: 0;
-  padding-right: 1rem;
+  margin-right: 20px;
 }
 
 .arrowLeft,
@@ -117,12 +117,41 @@
 .logo {
   width: 64px;
   height: 64px;
-  background: var(--color-border);
   border-radius: 50%;
+  overflow: hidden;
+  background: var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 6px;
+  }
+}
+
+.logoFallback {
+  font-family: $font-heading;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--color-text-muted);
+  opacity: 0.5;
 }
 
 .name {
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--color-text);
+  text-align: center;
+}
+
+.country {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
 }

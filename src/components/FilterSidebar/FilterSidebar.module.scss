@@ -1,111 +1,311 @@
 @use '../../styles/variables' as *;
 
+// ── DESKTOP SIDEBAR ──────────────────────────────────────
+.desktopSidebar {
+  width: 220px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 100px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+
+  // subtle scrollbar
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 2px; }
+
+  @include respond-to(md) { display: none; }
+}
+
+// ── MOBILE OVERLAY ───────────────────────────────────────
 .backdrop {
+  display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   z-index: 998;
   animation: fadeIn 0.2s ease;
+  @include respond-to(md) { display: block; }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.sidebar {
+.mobileSidebar {
+  display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: min(320px, 85vw);
-  background: $color-surface;
-  border-right: 1px solid $color-border;
+  top: 0; left: 0; bottom: 0;
+  width: min(290px, 88vw);
+  background: var(--color-bg);
+  border-right: 1px solid var(--color-border);
   z-index: 999;
-  display: flex;
-  flex-direction: column;
-  animation: slideIn 0.3s ease;
+  overflow-y: auto;
+  animation: slideIn 0.25s ease;
+  @include respond-to(md) { display: flex; flex-direction: column; }
 }
 
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slideIn {
   from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
+  to   { transform: translateX(0); }
 }
 
-.header {
-  @include flex-between;
-  padding: $spacing-lg;
-  border-bottom: 1px solid $color-border;
-  
-  h3 {
-    font-family: $font-heading;
-    font-size: 1.2rem;
-    letter-spacing: 0.05em;
-  }
+// ── INNER ────────────────────────────────────────────────
+.inner {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 $spacing-xl;
+}
+
+.sidebarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: $spacing-md;
+  margin-bottom: $spacing-sm;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sidebarTitle {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+.activePill {
+  background: var(--color-accent);
+  color: #000;
+  font-size: 0.58rem;
+  font-weight: 800;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebarActions {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.clearLink {
+  background: none;
+  border: none;
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 0;
+  transition: color 0.15s ease;
+  &:hover { color: #e74c3c; }
 }
 
 .closeBtn {
-  @include button-reset;
-  font-size: 1.5rem;
-  color: $color-text-muted;
-  
-  &:hover { color: $color-text; }
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  padding: 2px;
+  &:hover { color: var(--color-text); }
+  @include respond-to(md) { display: flex; }
 }
 
-.content {
-  padding: $spacing-lg;
-  overflow-y: auto;
+// ── SECTIONS ─────────────────────────────────────────────
+.sections { display: flex; flex-direction: column; }
+
+.section {
+  border-bottom: 1px solid var(--color-border);
+  padding: $spacing-md 0;
+  &:last-child { border-bottom: none; }
 }
 
-.group {
-  margin-bottom: $spacing-xl;
-  
-  h4 {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: $color-text-muted;
-    margin-bottom: $spacing-md;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 0 $spacing-sm;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  transition: color 0.15s ease;
+  &:hover { color: var(--color-text); }
+}
+
+.chevron { transition: transform 0.2s ease; opacity: 0.5; }
+.chevronOpen { transform: rotate(180deg); opacity: 0.5; }
+
+.sectionBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: $spacing-xs;
+}
+
+// ── PILLS ────────────────────────────────────────────────
+.pillGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.pill {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 2px;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+  white-space: nowrap;
+
+  &:hover {
+    border-color: var(--color-accent);
+    color: var(--color-text);
   }
 }
 
-.checkbox {
+.pillActive {
+  border-color: var(--color-accent) !important;
+  background: var(--color-accent) !important;
+  color: #000 !important;
+  font-weight: 700 !important;
+}
+
+// ── CHECKBOXES ───────────────────────────────────────────
+.checkRow {
   display: flex;
   align-items: center;
   gap: $spacing-sm;
   cursor: pointer;
+  padding: 4px 0;
+  &:hover .checkLabel { color: var(--color-text); }
+}
+
+.checkbox {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--color-border);
+  border-radius: 2px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  &:checked {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+}
+
+.checkLabel {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  transition: color 0.15s ease;
+}
+
+// ── PRICE ────────────────────────────────────────────────
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
   margin-bottom: $spacing-sm;
-  color: $color-text;
-  
-  input { accent-color: $color-accent; }
+}
+
+.priceMuted { font-size: 0.7rem; color: var(--color-text-muted); }
+
+.priceActive {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  font-family: $font-heading;
 }
 
 .range {
-  display: flex;
-  align-items: center;
-  gap: $spacing-md;
-  color: $color-text-muted;
-  font-size: 0.9rem;
-  
-  input[type="range"] {
-    flex: 1;
-    accent-color: $color-accent;
+  width: 100%;
+  height: 3px;
+  appearance: none;
+  background: linear-gradient(
+    to right,
+    var(--color-accent) 0%,
+    var(--color-accent) var(--pct, 100%),
+    var(--color-border) var(--pct, 100%),
+    var(--color-border) 100%
+  );
+  border-radius: 2px;
+  cursor: pointer;
+  outline: none;
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    cursor: pointer;
+    border: 2px solid var(--color-bg);
+    box-shadow: 0 0 0 1px var(--color-accent);
+  }
+  &::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    border: 2px solid var(--color-bg);
   }
 }
 
-.clearBtn {
-  @include button-reset;
-  width: 100%;
-  padding: $spacing-md;
-  border: 1px solid $color-border;
-  color: $color-text-muted;
-  font-size: 0.9rem;
-  border-radius: $border-radius;
-  margin-top: $spacing-lg;
-  
-  &:hover {
-    border-color: $color-accent;
-    color: $color-accent;
-  }
+// ── TOGGLES ──────────────────────────────────────────────
+.toggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 0;
+  cursor: pointer;
+}
+
+.toggleLabel {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+.toggle {
+  width: 34px;
+  height: 18px;
+  border-radius: 9px;
+  background: var(--color-border);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+  &.toggleOn { background: var(--color-accent); }
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s ease;
+  .toggleOn & { transform: translateX(16px); }
 }

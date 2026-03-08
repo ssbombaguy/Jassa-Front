@@ -21,8 +21,10 @@
   max-width: $container-max;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: $spacing-xl;
+  margin-bottom: 40px;
+
 
   @include respond-to(md) {
     grid-template-columns: repeat(2, 1fr);

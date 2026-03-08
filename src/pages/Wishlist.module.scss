@@ -1,0 +1,250 @@
+@use '../styles/variables' as *;
+
+.page {
+  padding: $spacing-xl $spacing-lg;
+  max-width: $container-max;
+  margin: 0 auto;
+  min-height: 60vh;
+}
+
+// ── EMPTY STATE ──────────────────────────────────────────
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-md;
+  padding: $spacing-2xl * 2;
+  text-align: center;
+}
+
+.emptyIcon {
+  color: var(--color-border);
+  opacity: 0.5;
+}
+
+.empty h2 {
+  font-family: $font-heading;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.empty p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.browseBtn {
+  margin-top: $spacing-sm;
+  padding: $spacing-md $spacing-xl;
+  background: var(--color-accent);
+  color: #000;
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: $border-radius;
+  transition: all 0.2s ease;
+
+  &:hover { opacity: 0.85; }
+}
+
+// ── HEADER ───────────────────────────────────────────────
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-2xl;
+  padding-bottom: $spacing-lg;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-md;
+
+  h1 {
+    font-family: $font-heading;
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+}
+
+.count {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.clearBtn {
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+
+  &:hover { color: #e74c3c; }
+}
+
+// ── GRID ─────────────────────────────────────────────────
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: $spacing-lg;
+
+  @include respond-to(sm) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-md;
+  }
+}
+
+// ── CARD ─────────────────────────────────────────────────
+.card {
+  background: var(--color-surface);
+  border-radius: $border-radius;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: fadeUp 0.4s ease both;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $glow;
+  }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.imageWrap {
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--color-border);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover img { transform: scale(1.04); }
+}
+
+.imagePlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $font-heading;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--color-text-muted);
+  opacity: 0.3;
+}
+
+// ── INFO ─────────────────────────────────────────────────
+.info {
+  padding: $spacing-md;
+  flex: 1;
+}
+
+.brand {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 2px;
+}
+
+.name {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-decoration: none;
+  margin-bottom: $spacing-sm;
+  line-height: 1.3;
+
+  &:hover { color: var(--color-accent); }
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-sm;
+}
+
+.price {
+  font-family: $font-heading;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.priceOld {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+}
+
+// ── ACTIONS ──────────────────────────────────────────────
+.actions {
+  display: flex;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-md $spacing-md;
+}
+
+.cartBtn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  background: var(--color-accent);
+  color: #000;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: $border-radius;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover { opacity: 0.85; }
+}
+
+.removeBtn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1.5px solid var(--color-border);
+  color: var(--color-text-muted);
+  border-radius: $border-radius;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    border-color: #e74c3c;
+    color: #e74c3c;
+  }
+}

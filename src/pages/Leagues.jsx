@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams, Navigate } from 'react-router-dom';
 import { getLeagues } from '../api/leaguesApi';
 import classes from './Leagues.module.scss';
 
 const Leagues = () => {
+  const { id } = useParams(); // present on /leagues/:id
   const [leagues, setLeagues] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,6 +18,9 @@ const Leagues = () => {
       .catch((err) => setError(err?.error || err?.message || 'Failed to load leagues'))
       .finally(() => setLoading(false));
   }, []);
+
+  // /leagues/1 → redirect to /jerseys?league=1
+  if (id) return <Navigate to={`/jerseys?league=${id}`} replace />;
 
   if (loading) return <div className={classes.loading}>Loading leagues...</div>;
   if (error) return <div className={classes.loading}>{error}</div>;

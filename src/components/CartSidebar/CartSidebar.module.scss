@@ -1,17 +1,11 @@
-@use 'sass:color';
 @use '../../styles/variables' as *;
 
 .backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 998;
-  animation: fadeIn 0.2s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  z-index: 1100;
 }
 
 .sidebar {
@@ -19,158 +13,280 @@
   top: 0;
   right: 0;
   bottom: 0;
-  width: min(400px, 95vw);
-  background: $color-surface;
-  border-left: 1px solid $color-border;
-  z-index: 999;
+  width: 420px;
+  max-width: 100vw;
+  background: var(--color-surface);
+  border-left: 1px solid var(--color-border);
+  z-index: 1101;
   display: flex;
   flex-direction: column;
-  animation: slideIn 0.3s ease;
+  animation: slideIn 0.25s ease;
+
+  @include respond-to(sm) { width: 100vw; }
 }
 
 @keyframes slideIn {
   from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+  to   { transform: translateX(0); }
 }
 
+// ── HEADER ───────────────────────────────────────────────
 .header {
-  @include flex-between;
-  padding: $spacing-lg;
-  border-bottom: 1px solid $color-border;
-  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-lg $spacing-xl;
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+
   h3 {
     font-family: $font-heading;
-    font-size: 1.2rem;
-    letter-spacing: 0.05em;
+    font-size: 1rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
+}
+
+.headerCount {
+  color: var(--color-text-muted);
+  font-weight: 400;
 }
 
 .closeBtn {
-  @include button-reset;
-  font-size: 1.5rem;
-  color: $color-text-muted;
-  
-  &:hover { color: $color-text; }
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: $spacing-xs;
+  display: flex;
+  align-items: center;
+  border-radius: $border-radius;
+  transition: color 0.15s ease;
+
+  &:hover { color: var(--color-text); }
 }
 
+// ── CONTENT ──────────────────────────────────────────────
 .content {
   flex: 1;
   overflow-y: auto;
-  padding: $spacing-lg;
+  display: flex;
+  flex-direction: column;
 }
 
+// ── EMPTY ────────────────────────────────────────────────
 .empty {
-  @include flex-center;
+  flex: 1;
+  display: flex;
   flex-direction: column;
-  gap: $spacing-lg;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-md;
   padding: $spacing-2xl;
   text-align: center;
-  color: $color-text-muted;
+}
+
+.emptyIcon {
+  color: var(--color-border);
+  opacity: 0.5;
+}
+
+.empty p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
 }
 
 .startBtn {
-  padding: $spacing-md $spacing-xl;
-  background: $color-accent;
-  color: $color-bg;
-  font-weight: 600;
+  padding: $spacing-sm $spacing-xl;
+  background: var(--color-accent);
+  color: #000;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
   border-radius: $border-radius;
-  
-  &:hover { background: color.adjust($color-accent, $lightness: 8%); }
+  transition: opacity 0.2s;
+
+  &:hover { opacity: 0.85; }
 }
 
+// ── LIST ─────────────────────────────────────────────────
 .list {
   list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.item {
-  padding: $spacing-md 0;
-  border-bottom: 1px solid $color-border;
+  flex: 1;
+  padding: $spacing-md $spacing-xl;
   display: flex;
   flex-direction: column;
-  gap: $spacing-sm;
-}
-
-.itemInfo {
-  .itemName { font-weight: 600; display: block; }
-  .itemMeta { font-size: 0.85rem; color: $color-text-muted; }
-}
-
-.itemActions {
-  display: flex;
-  align-items: center;
   gap: $spacing-md;
 }
 
-.qty {
+// ── ITEM ─────────────────────────────────────────────────
+.item {
   display: flex;
+  align-items: flex-start;
+  gap: $spacing-md;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid var(--color-border);
+
+  &:last-child { border-bottom: none; }
+}
+
+.itemImage {
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  border-radius: $border-radius;
+  overflow: hidden;
+  background: var(--color-border);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.itemInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.itemName {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-text);
+  line-height: 1.3;
+}
+
+.itemMeta {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.04em;
+}
+
+// ── QTY ──────────────────────────────────────────────────
+.qty {
+  display: inline-flex;
   align-items: center;
-  gap: $spacing-xs;
-  
+  margin-top: 4px;
+  border: 1px solid var(--color-border);
+  border-radius: $border-radius;
+  overflow: hidden;
+  width: fit-content;
+
   button {
-    @include button-reset;
     width: 28px;
     height: 28px;
-    border: 1px solid $color-border;
-    color: $color-text;
-    border-radius: $border-radius;
-    
-    &:hover { border-color: $color-accent; color: $color-accent; }
+    background: transparent;
+    border: none;
+    color: var(--color-text);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+
+    &:hover { background: var(--color-border); }
   }
-  
-  span { min-width: 24px; text-align: center; }
+
+  span {
+    min-width: 32px;
+    text-align: center;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border-left: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// ── ITEM RIGHT ───────────────────────────────────────────
+.itemRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: $spacing-sm;
+  flex-shrink: 0;
 }
 
 .itemPrice {
-  font-weight: 600;
-  color: $color-accent;
+  font-family: $font-heading;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-accent);
 }
 
 .removeBtn {
-  @include button-reset;
-  color: $color-text-muted;
-  margin-left: auto;
-  
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s ease;
+
   &:hover { color: #e74c3c; }
 }
 
+// ── FOOTER ───────────────────────────────────────────────
 .footer {
-  margin-top: auto;
-  padding-top: $spacing-lg;
-  border-top: 1px solid $color-border;
+  padding: $spacing-lg $spacing-xl;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  flex-shrink: 0;
 }
 
 .subtotal {
-  @include flex-between;
-  font-size: 1.1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
   font-weight: 600;
-  margin-bottom: $spacing-md;
+  margin-bottom: $spacing-sm;
+}
+
+.subtotalPrice {
+  font-family: $font-heading;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--color-accent);
 }
 
 .checkoutBtn {
-  @include button-reset;
   width: 100%;
-  padding: $spacing-md;
-  background: $color-accent;
-  color: $color-bg;
-  font-weight: 600;
+  padding: 14px;
+  background: var(--color-accent);
+  color: #000;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
   border-radius: $border-radius;
-  transition: $transition;
-  
-  &:hover {
-    background: color.adjust($color-accent, $lightness: 8%);
-    box-shadow: $glow;
-  }
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover { opacity: 0.88; }
 }
 
 .clearBtn {
-  @include button-reset;
-  width: 100%;
-  padding: $spacing-sm;
-  margin-top: $spacing-sm;
-  color: $color-text-muted;
-  font-size: 0.9rem;
-  
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+
   &:hover { color: #e74c3c; }
 }

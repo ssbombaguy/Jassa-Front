@@ -1,0 +1,179 @@
+@use '../styles/variables' as *;
+
+.page {
+  padding: $spacing-xl $spacing-lg;
+  min-height: 60vh;
+  max-width: $container-max;
+  margin: 0 auto;
+}
+
+// ── HEADER ───────────────────────────────────────────────
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  margin-bottom: $spacing-xl;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: baseline;
+  gap: $spacing-md;
+
+  h1 {
+    font-family: $font-heading;
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+}
+
+.resultCount {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+}
+
+// ── GRID TOGGLE ──────────────────────────────────────────
+.gridToggle {
+  display: flex;
+  border: 1.5px solid var(--color-border);
+  border-radius: 4px;
+  overflow: hidden;
+
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    & + button { border-left: 1.5px solid var(--color-border); }
+    &:hover { color: var(--color-text); }
+  }
+}
+
+.activeToggle {
+  background: var(--color-accent) !important;
+  color: #000 !important;
+}
+
+// ── MOBILE FILTER BTN ─────────────────────────────────────
+.mobileFilterBtn {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 8px $spacing-md;
+  border: 1.5px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text);
+  border-radius: 4px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  @include respond-to(md) { display: flex; }
+}
+
+.filterBadge {
+  background: var(--color-accent);
+  color: #000;
+  font-size: 0.6rem;
+  font-weight: 800;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// ── PER PAGE SELECT ───────────────────────────────────────
+.perPage {
+  select {
+    border: 1.5px solid var(--color-border);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--color-text);
+    padding: 7px 10px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+
+    &:hover { border-color: var(--color-accent); }
+  }
+}
+
+// ── MAIN LAYOUT ──────────────────────────────────────────
+.layout {
+  display: flex;
+  gap: $spacing-2xl;
+  align-items: flex-start;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+// ── PAGINATION ────────────────────────────────────────────
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  margin-top: $spacing-2xl;
+  padding-top: $spacing-xl;
+  border-top: 1px solid var(--color-border);
+}
+
+.pageBtn {
+  min-width: 40px;
+  height: 40px;
+  padding: 0 $spacing-md;
+  border: 1.5px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-muted);
+  border-radius: 4px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+}
+
+.pageActive {
+  border-color: var(--color-accent) !important;
+  background: var(--color-accent) !important;
+  color: #000 !important;
+  font-weight: 800 !important;
+}

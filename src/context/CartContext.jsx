@@ -1,18 +1,46 @@
-import { createContext, useContext, useState, useMemo } from 'react';
+import { createContext, useContext, useState, useMemo, useEffect } from 'react';
 
 const CartContext = createContext(null);
 
+const STORAGE_KEY = 'jasssport_cart';
+
+const loadFromStorage = () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+};
+
+const saveToStorage = (items) => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  } catch {
+    // storage full or blocked — fail silently
+  }
+};
+
 export const CartProvider = ({ children }) => {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(() => loadFromStorage());
+
+  // persist on every change
+  useEffect(() => {
+    saveToStorage(items);
+  }, [items]);
+
+  const getId = (jersey) => jersey?.product_id ?? jersey?.jersey_id ?? jersey?.id;
 
   const addToCart = (jersey, size, quantity = 1) => {
-    const id = jersey.id ?? jersey.jersey_id;
+    const id  = getId(jersey);
     const key = `${id}-${size}`;
     setItems((prev) => {
-      const existing = prev.find((i) => `${i.jersey.id ?? i.jersey.jersey_id}-${i.size}` === key);
+      const existing = prev.find(
+        (i) => `${getId(i.jersey)}-${i.size}` === key
+      );
       if (existing) {
         return prev.map((i) =>
-          `${i.jersey.id ?? i.jersey.jersey_id}-${i.size}` === key
+          `${getId(i.jersey)}-${i.size}` === key
             ? { ...i, quantity: i.quantity + quantity }
             : i
         );
@@ -21,16 +49,14 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  const removeFromCart = (jerseyId) => {
-    setItems((prev) => prev.filter((i) => (i.jersey.id ?? i.jersey.jersey_id) !== jerseyId));
+  const removeFromCart = (id) => {
+    setItems((prev) => prev.filter((i) => getId(i.jersey) !== id));
   };
 
-  const updateQuantity = (jerseyId, quantity) => {
-    if (quantity <= 0) return removeFromCart(jerseyId);
+  const updateQuantity = (id, quantity) => {
+    if (quantity <= 0) return removeFromCart(id);
     setItems((prev) =>
-      prev.map((i) =>
-        (i.jersey.id ?? i.jersey.jersey_id) === jerseyId ? { ...i, quantity } : i
-      )
+      prev.map((i) => getId(i.jersey) === id ? { ...i, quantity } : i)
     );
   };
 
@@ -42,25 +68,26 @@ export const CartProvider = ({ children }) => {
   );
 
   const cartTotal = useMemo(
-    () =>
-      items.reduce((acc, i) => {
-        const price = i.jersey.price ?? i.jersey.price_usd ?? 0;
-        return acc + price * i.quantity;
-      }, 0),
+    () => items.reduce((acc, i) => {
+      const price = i.jersey?.price ?? i.jersey?.price_usd ?? 0;
+      return acc + Number(price) * i.quantity;
+    }, 0),
     [items]
   );
 
-  const value = {
-    cartItems: items,
-    addToCart,
-    removeFromCart,
-    updateQuantity,
-    clearCart,
-    cartTotal,
-    cartCount,
-  };
-
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  return (
+    <CartContext.Provider value={{
+      cartItems: items,
+      addToCart,
+      removeFromCart,
+      updateQuantity,
+      clearCart,
+      cartTotal,
+      cartCount,
+    }}>
+      {children}
+    </CartContext.Provider>
+  );
 };
 
 export const useCart = () => {

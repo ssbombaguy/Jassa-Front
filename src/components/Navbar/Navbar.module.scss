@@ -1,49 +1,18 @@
 @use '../../styles/variables' as *;
 
+// ── HEADER ───────────────────────────────────────────────
 .header {
   position: sticky;
   top: 0;
   z-index: 1000;
   background: transparent;
   transition: background $transition;
-  
+
   &.scrolled {
-    background: var(--color-surface);
+    background: var(--color-bg);
     border-bottom: 1px solid var(--color-border);
-    box-shadow: 0 1px 0 var(--color-border);
+    box-shadow: 0 1px 24px rgba(0,0,0,0.18);
   }
-}
-
-.actions {
-  display: flex;
-  align-items: center;
-  gap: $spacing-sm;
-
-  @include respond-to(md) {
-    display: none;
-  }
-}
-
-.langSwitcher {
-  display: flex;
-  gap: 2px;
-
-  button {
-    @include button-reset;
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-    padding: $spacing-xs $spacing-sm;
-
-    &:hover { color: var(--color-text); }
-    &.langActive { color: var(--color-accent); font-weight: 600; }
-  }
-}
-
-.themeBtn {
-  @include button-reset;
-  font-size: 1.1rem;
-  color: var(--color-text);
-  padding: $spacing-xs;
 }
 
 .inner {
@@ -55,16 +24,19 @@
   gap: $spacing-xl;
 }
 
+// ── LOGO ─────────────────────────────────────────────────
 .logo {
   font-family: $font-heading;
   font-size: 1.75rem;
   letter-spacing: 0.15em;
   color: var(--color-text);
   flex-shrink: 0;
+  transition: color $transition;
 
   &:hover { color: var(--color-accent); }
 }
 
+// ── SEARCH ───────────────────────────────────────────────
 .searchForm {
   flex: 1;
   max-width: 400px;
@@ -74,15 +46,19 @@
   border: 1px solid var(--color-border);
   border-radius: $border-radius;
   padding: 0 $spacing-md;
-  
-  @include respond-to(md) {
-    display: none;
+  transition: border-color $transition;
+
+  &:focus-within {
+    border-color: var(--color-accent);
   }
+
+  @include respond-to(md) { display: none; }
 }
 
 .searchIcon {
   color: var(--color-text-muted);
   margin-right: $spacing-sm;
+  flex-shrink: 0;
 }
 
 .searchInput {
@@ -94,116 +70,236 @@
   font-family: $font-body;
   font-size: 0.9rem;
 
-  &::placeholder {
-    color: var(--color-text-muted);
-  }
-  
-  &:focus {
-    outline: none;
-  }
+  &::placeholder { color: var(--color-text-muted); }
+  &:focus { outline: none; }
 }
 
+// ── NAV ──────────────────────────────────────────────────
 .nav {
   display: flex;
   align-items: center;
   gap: $spacing-lg;
-  
-  @include respond-to(md) {
-    display: none;
-  }
+
+  @include respond-to(md) { display: none; }
 }
 
 .navLink {
   display: inline-flex;
   align-items: center;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 500;
+  letter-spacing: 0.02em;
   color: var(--color-text-muted);
   transition: color $transition;
+  white-space: nowrap;
 
-  &:hover, &.active { color: var(--color-accent); }
+  &:hover { color: var(--color-text); }
 }
 
+// ── DROPDOWN ─────────────────────────────────────────────
 .dropdown {
   position: relative;
 
-  &:hover .dropdownMenu {
+  &:hover > .dropdownMenu {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+    pointer-events: all;
   }
 }
 
 .dropdownTitle {
   display: inline-flex;
   align-items: center;
-  font-size: 0.9rem;
+  gap: 5px;
+  font-size: 0.88rem;
   font-weight: 500;
+  letter-spacing: 0.02em;
   color: var(--color-text-muted);
   cursor: default;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+
+  .dropdown:hover & { color: var(--color-text); }
+
+  // tiny chevron
+  &::after {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 3.5px solid transparent;
+    border-right: 3.5px solid transparent;
+    border-top: 3.5px solid currentColor;
+    opacity: 0.45;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .dropdown:hover &::after {
+    transform: rotate(180deg);
+    opacity: 0.9;
+  }
 }
 
 .dropdownMenu {
   position: absolute;
-  top: calc(100% + 10px);
-  left: 0;
-  min-width: 180px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: $spacing-sm;
+  top: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-6px);
+  min-width: 200px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: $border-radius;
-  box-shadow: $card-shadow;
+  border-top: 2px solid var(--color-accent);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.15);
   opacity: 0;
   visibility: hidden;
-  transform: translateY(6px);
-  transition: $transition;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+  z-index: 1001;
+  padding: $spacing-sm 0;
+
+  // arrow pointer
+  &::before {
+    content: '';
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    background: var(--color-accent);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  }
+
+  .dropdown:hover & {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.dropdownSection {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdownSectionTitle {
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  padding: $spacing-xs $spacing-lg;
+  opacity: 0.6;
 }
 
 .dropdownLink {
-  padding: 7px 10px;
-  border-radius: $border-radius;
-  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  padding: 9px $spacing-lg;
+  font-size: 0.86rem;
+  font-weight: 500;
   color: var(--color-text-muted);
+  white-space: nowrap;
+  transition: all 0.12s ease;
+  border-left: 2px solid transparent;
 
   &:hover {
-    color: var(--color-accent);
-    background: var(--color-bg);
+    color: var(--color-text);
+    background: rgba(255,255,255,0.03);
+    border-left-color: var(--color-accent);
+    padding-left: calc(#{$spacing-lg} + 4px);
   }
+}
+
+// ── ACTIONS ──────────────────────────────────────────────
+.actions {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  @include respond-to(md) { display: none; }
+}
+
+.langSwitcher {
+  display: flex;
+  gap: 2px;
+
+  button {
+    @include button-reset;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    padding: $spacing-xs $spacing-sm;
+    transition: color $transition;
+
+    &:hover { color: var(--color-text); }
+    &.langActive { color: var(--color-accent); font-weight: 700; }
+  }
+}
+
+.themeBtn {
+  @include button-reset;
+  color: var(--color-text-muted);
+  padding: $spacing-xs;
+  display: flex;
+  align-items: center;
+  transition: color $transition;
+
+  &:hover { color: var(--color-text); }
+}
+
+.wishlistBtn {
+  @include button-reset;
+  position: relative;
+  color: var(--color-text-muted);
+  padding: $spacing-sm;
+  display: inline-flex;
+  align-items: center;
+  transition: color $transition;
+
+  &:hover { color: #e74c3c; }
 }
 
 .cartBtn {
   @include button-reset;
   position: relative;
-  color: var(--color-text);
+  color: var(--color-text-muted);
   padding: $spacing-sm;
+  display: inline-flex;
+  align-items: center;
+  transition: color $transition;
 
   &:hover { color: var(--color-accent); }
 }
 
 .cartBadge {
   position: absolute;
-  top: -4px;
-  right: -4px;
+  top: 0px;
+  right: 0px;
   background: var(--color-accent);
-  color: var(--color-on-accent);
-  font-size: 0.65rem;
-  font-weight: 700;
-  min-width: 18px;
-  height: 18px;
-  border-radius: 9px;
-  @include flex-center;
+  color: #000;
+  font-size: 0.6rem;
+  font-weight: 800;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  pointer-events: none;
 }
 
+// ── MOBILE TOGGLE ────────────────────────────────────────
 .menuToggle {
   @include button-reset;
   display: none;
   flex-direction: column;
   gap: 5px;
   color: var(--color-text);
-  
+
   span {
     display: block;
     width: 24px;
@@ -211,20 +307,15 @@
     background: currentColor;
     transition: $transition;
   }
-  
-  &.open span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
-  }
+
+  &.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
   &.open span:nth-child(2) { opacity: 0; }
-  &.open span:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
-  }
-  
-  @include respond-to(md) {
-    display: flex;
-  }
+  &.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+  @include respond-to(md) { display: flex; }
 }
 
+// ── MOBILE NAV ───────────────────────────────────────────
 .mobileNav {
   position: fixed;
   top: $header-height;
@@ -241,21 +332,24 @@
   opacity: 0;
   visibility: hidden;
   transition: $transition;
-  
+  max-height: calc(100vh - #{$header-height});
+  overflow-y: auto;
+
   &.open {
     transform: translateY(0);
     opacity: 1;
     visibility: visible;
   }
-  
-  @media (min-width: $breakpoint-tablet) {
-    display: none;
-  }
+
+  @media (min-width: $breakpoint-tablet) { display: none; }
 }
 
 .mobileLink {
-  font-size: 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
   color: var(--color-text);
+  padding: $spacing-xs 0;
+  transition: color $transition;
 
   &:hover { color: var(--color-accent); }
 }
@@ -271,6 +365,7 @@
     border-radius: $border-radius;
     color: var(--color-text);
     font-family: $font-body;
+    font-size: 0.9rem;
   }
 }
 
@@ -278,18 +373,22 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-xs;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: $spacing-md;
 }
 
 .mobileGroupTitle {
-  font-size: 0.82rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
+  font-weight: 700;
   color: var(--color-text-muted);
+  margin-bottom: $spacing-xs;
 }
 
 .mobileGroupLinks {
   display: flex;
   flex-direction: column;
-  gap: $spacing-xs;
+  gap: 2px;
   padding-left: $spacing-sm;
 }

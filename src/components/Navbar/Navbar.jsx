@@ -1,32 +1,39 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { getHeaderNav } from '../../api/navApi';
-import {Search, ShoppingCart,Sun,Moon } from 'lucide-react';
+import { Search, ShoppingCart, Sun, Moon, Heart } from 'lucide-react';
 import classes from './Navbar.module.scss';
 
-
-
 const fallbackLinks = [
-  { id: 'jerseys',     label: 'Jerseys',       path: '/jerseys',  children: [] },
-  { id: 'leagues',     label: 'Leagues',       path: '/leagues',  children: [] },
-  { id: 'equipment',   label: 'Equipment',     path: '/equipment',children: [] },
-  { id: 'sale',        label: 'Sale',          path: '/sale',     children: [] },
-  { id: 'new-arrivals',label: 'New Arrivals',  path: '/new-arrivals', children: [] },
-]
+  { id: 'jerseys',      label: 'Jerseys',      path: '/jerseys',      children: [] },
+  { id: 'leagues',      label: 'Leagues',      path: '/leagues',      children: [] },
+  { id: 'equipment',    label: 'Equipment',    path: '/equipment',    children: [] },
+  { id: 'sale',         label: 'Sale',         path: '/sale',         children: [] },
+  { id: 'new-arrivals', label: 'New Arrivals', path: '/new-arrivals', children: [] },
+];
+
+// Group children into sections for mega menu
+// Children with no explicit section go into a default group
+const groupChildren = (children) => {
+  // For now put all children in one column — can be extended
+  return [{ title: null, links: children }];
+};
 
 const Navbar = ({ onCartOpen }) => {
   const { cartCount } = useCart();
+  const { wishlistCount } = useWishlist();
   const { theme, toggleTheme } = useTheme();
   const { lang, setLang, t } = useLanguage();
   const navigate = useNavigate();
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+
+  const [scrolled, setScrolled]     = useState(false);
+  const [menuOpen, setMenuOpen]     = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [headerLinks, setHeaderLinks] = useState([]);
-
 
   const navLinks = headerLinks.length ? headerLinks : fallbackLinks;
 
@@ -38,19 +45,10 @@ const Navbar = ({ onCartOpen }) => {
 
   useEffect(() => {
     let mounted = true;
-    getHeaderNav().then((items) => {
-        if (!mounted) return;
-        console.log(items);
-        setHeaderLinks(items);
-      })
-      .catch(() => {
-        if (!mounted) return;
-        setHeaderLinks([]);
-      });
-
-    return () => {
-      mounted = false;
-    };
+    getHeaderNav()
+      .then((items) => { if (mounted) setHeaderLinks(items); })
+      .catch(() => { if (mounted) setHeaderLinks([]); });
+    return () => { mounted = false; };
   }, []);
 
   const handleSearch = (e) => {
@@ -58,51 +56,80 @@ const Navbar = ({ onCartOpen }) => {
     if (searchValue.trim()) navigate(`/jerseys?search=${encodeURIComponent(searchValue.trim())}`);
   };
 
+  const renderChild = (child, key, mobile = false) =>
+    child.external ? (
+      <a
+        key={key}
+        href={child.path || '#'}
+        target="_blank"
+        rel="noreferrer"
+        className={mobile ? classes.mobileLink : classes.dropdownLink}
+      >
+        {child.label}
+      </a>
+    ) : (
+      <Link
+        key={key}
+        to={child.path || '/'}
+        className={mobile ? classes.mobileLink : classes.dropdownLink}
+        onClick={() => setMenuOpen(false)}
+      >
+        {child.label}
+      </Link>
+    );
+
   const renderNavItem = (item, mobile = false) => {
-    const key = `${mobile ? 'mobile' : 'desktop'}-${item.id}`;
+    const key = `${mobile ? 'm' : 'd'}-${item.id}`;
 
     if (item.children?.length) {
+      const sections = groupChildren(item.children);
+
       return (
         <div key={key} className={mobile ? classes.mobileGroup : classes.dropdown}>
-          <span className={mobile ? classes.mobileGroupTitle : classes.dropdownTitle}>{item.label}</span>
-          <div className={mobile ? classes.mobileGroupLinks : classes.dropdownMenu}>
-            {item.children.map((child) =>
-              child.external ? (
-                <a
-                  key={`${key}-${child.id}`}
-                  href={child.path || '#'}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={mobile ? classes.mobileLink : classes.dropdownLink}
-                >
-                  {child.label}
-                </a>
-              ) : (
-                <Link
-                  key={`${key}-${child.id}`}
-                  to={child.path || '/'}
-                  className={mobile ? classes.mobileLink : classes.dropdownLink}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {child.label}
-                </Link>
-              )
-            )}
-          </div>
+          {mobile ? (
+            <>
+              <span className={classes.mobileGroupTitle}>{item.label}</span>
+              <div className={classes.mobileGroupLinks}>
+                {item.children.map((child, i) =>
+                  renderChild(child, `${key}-${i}`, true)
+                )}
+              </div>
+            </>
+          ) : (
+            <>
+              <span className={classes.dropdownTitle}>{item.label}</span>
+              <div className={classes.dropdownMenu}>
+                {sections.map((section, si) => (
+                  <div key={si} className={classes.dropdownSection}>
+                    {section.title && (
+                      <span className={classes.dropdownSectionTitle}>
+                        {section.title}
+                      </span>
+                    )}
+                    {section.links.map((child, ci) =>
+                      renderChild(child, `${key}-${si}-${ci}`)
+                    )}
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       );
     }
 
     if (item.external) {
       return (
-        <a key={key} href={item.path || '#'} target="_blank" rel="noreferrer" className={mobile ? classes.mobileLink : classes.navLink}>
+        <a key={key} href={item.path || '#'} target="_blank" rel="noreferrer"
+          className={mobile ? classes.mobileLink : classes.navLink}>
           {item.label}
         </a>
       );
     }
 
     return (
-      <Link key={key} to={item.path || '/'} className={mobile ? classes.mobileLink : classes.navLink} onClick={() => setMenuOpen(false)}>
+      <Link key={key} to={item.path || '/'} onClick={() => setMenuOpen(false)}
+        className={mobile ? classes.mobileLink : classes.navLink}>
         {item.label}
       </Link>
     );
@@ -112,12 +139,10 @@ const Navbar = ({ onCartOpen }) => {
     <>
       <header className={`${classes.header} ${scrolled ? classes.scrolled : ''}`}>
         <div className={classes.inner}>
-          <Link to="/" className={classes.logo}>
-            JASSSPORT
-          </Link>
+          <Link to="/" className={classes.logo}>JASSSPORT</Link>
 
           <form className={classes.searchForm} onSubmit={handleSearch}>
-            <span className={classes.searchIcon}><Search /></span>
+            <span className={classes.searchIcon}><Search size={16} /></span>
             <input
               type="search"
               className={classes.searchInput}
@@ -134,27 +159,36 @@ const Navbar = ({ onCartOpen }) => {
 
           <div className={classes.actions}>
             <div className={classes.langSwitcher}>
-              <button className={lang === 'en' ? classes.langActive : ''} onClick={() => setLang('en')}>
-                EN
-              </button>
-              <button className={lang === 'ka' ? classes.langActive : ''} onClick={() => setLang('ka')}>
-                KA
-              </button>
+              <button className={lang === 'en' ? classes.langActive : ''} onClick={() => setLang('en')}>EN</button>
+              <button className={lang === 'ka' ? classes.langActive : ''} onClick={() => setLang('ka')}>KA</button>
             </div>
-            <button
-              className={classes.themeBtn}
-              onClick={toggleTheme}
-              aria-label={theme === 'dark' ? 'Switch to light' : 'Switch to dark'}
-            >
-              {theme === 'dark' ? <Sun size={20}/> :<Moon size={20}/>}
+
+            <button className={classes.themeBtn} onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Switch to light' : 'Switch to dark'}>
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
-            <button className={classes.cartBtn} onClick={onCartOpen} aria-label={`${t('nav.cart')}: ${cartCount} items`}>
-              <ShoppingCart />
-              {cartCount > 0 ? <span className={classes.cartBadge}>{cartCount > 99 ? '99+' : cartCount}</span> : null}
+
+            <Link to="/wishlist" className={classes.wishlistBtn} aria-label={`Wishlist: ${wishlistCount}`}>
+              <Heart size={19} />
+              {wishlistCount > 0 && (
+                <span className={classes.cartBadge}>{wishlistCount > 99 ? '99+' : wishlistCount}</span>
+              )}
+            </Link>
+
+            <button className={classes.cartBtn} onClick={onCartOpen}
+              aria-label={`Cart: ${cartCount} items`}>
+              <ShoppingCart size={19} />
+              {cartCount > 0 && (
+                <span className={classes.cartBadge}>{cartCount > 99 ? '99+' : cartCount}</span>
+              )}
             </button>
           </div>
 
-          <button className={`${classes.menuToggle} ${menuOpen ? classes.open : ''}`} onClick={() => setMenuOpen((p) => !p)} aria-label="Menu">
+          <button
+            className={`${classes.menuToggle} ${menuOpen ? classes.open : ''}`}
+            onClick={() => setMenuOpen((p) => !p)}
+            aria-label="Menu"
+          >
             <span /><span /><span />
           </button>
         </div>
